@@ -1,4 +1,10 @@
-Note, all code in this repository is derived from Ben Fry's
-Visualizing Data, and remains under copyright as specified in the
-preface of that book. Any non-derivitive additions by me are licensed
-under the MIT License.
+Note, most of code in this repository is derived from the examples in
+Ben Fry's Visualizing Data, and remains under copyright as specified
+in the preface of that book. Any non-derivitive additions by me are
+licensed under the MIT License.
+
+The orriginal examples can be found on Ben Fry's Web site:
+https://www.benfry.com/writing/archives/category/examples/
+
+It's hoped that this code extends the usefullness of Fry's excellent
+work to world of p5.js.
