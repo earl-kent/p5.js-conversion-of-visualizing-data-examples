@@ -60,18 +60,6 @@ function draw() {
 }
 
 
-function draw_alt() {
-   
-  for (let row = 0; row < rowCount; row++) {
-    let abbrev = dataTable.getString(row);
-    let name = locationTable.findRow(abbrev, 0).getString(1)
-    let x = locationTable.getFloat(abbrev, 1);
-    let y = locationTable.getFloat(abbrev, 2);
-    drawData(x, y, abbrev);
-  }
-}
-
-
 // Map the size of the ellipse to the data value
 function drawData(x, y, abbrev) {
   // Get data value for state
