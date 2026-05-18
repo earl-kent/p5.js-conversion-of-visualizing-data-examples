@@ -5,6 +5,7 @@ let rowCount;
 let dataTable;
 let dataMin = Number.MAX_VALUE;
 let dataMax = Number.MIN_VALUE;
+let f;
 
 // Any files, data or graphic, that need to be used immediately should
 // be loaded in preload, which ensure the resource is full loaded and
@@ -15,6 +16,8 @@ function preload() {
 
   // Read the data table
   dataTable = new loadTable("data/random.tsv");
+
+  f = loadFont("data/UniversalisADFStd-Bold.otf");
 }
 
 
@@ -32,8 +35,12 @@ function setup() {
       dataMin = v;
     }
   }
+
+
   smooth();
   noStroke();
+  textFont(f);
+  // textSize(24);
 }
 
 
@@ -41,10 +48,15 @@ function draw() {
   background(255);
   image(mapImage, 0, 0);
 
+  // Drawing attributes for the ellipses.
+  smooth( );
+  fill(192, 0, 0);
+  noStroke( );
+
   for (let row = 0; row < rowCount; row++) {
     let abbrev = dataTable.getString(row, 0);
-    let x = locationTable.findRow(abbrev, 0).getString(1)
-    let y = locationTable.findRow(abbrev, 0).getString(2)
+    let x = locationTable.findRow(abbrev, 0).getNum(1)
+    let y = locationTable.findRow(abbrev, 0).getNum(2)
     drawData(x, y, abbrev);
   }
 }
