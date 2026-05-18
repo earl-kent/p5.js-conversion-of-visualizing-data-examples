@@ -60,7 +60,6 @@ function draw() {
 }
 
 
-
 function draw_alt() {
    
   for (let row = 0; row < rowCount; row++) {
