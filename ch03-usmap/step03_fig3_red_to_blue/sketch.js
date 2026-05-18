@@ -50,11 +50,8 @@ function draw() {
   // Loop through the rows of the locations file and draw the points
   for (let row = 0; row < rowCount; row++) {
     let abbrev = dataTable.getString(row, 0);
-    // let x = locationTable.getNum(row, 1);  // column 1
-    // let y = locationTable.getNum(row, 2);  // column 2
     let x = locationTable.findRow(abbrev, 0).getString(1)
     let y = locationTable.findRow(abbrev, 0).getString(2)
-    // ellipse(x, y, 9, 9);
     drawData(x, y, abbrev);
   }
 }
@@ -63,7 +60,7 @@ function draw() {
 // Map the size of the ellipse to the data value
 function drawData(x, y, abbrev) {
   // Get data value for state
-  let v = dataTable.findRow(abbrev, 0).getString(1);  
+  let v = dataTable.findRow(abbrev, 0).getString(1);
   let percent = norm(v, dataMin, dataMax);
   between = lerpColor('#FF4422', '#4422CC', percent);  // red to blue
   fill(between);
