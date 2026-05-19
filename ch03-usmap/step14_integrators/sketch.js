@@ -8,9 +8,6 @@ let dataMin = -10;
 let dataMax = 10;
 let font;
 
-let loading, loaded;
-let randomCount = 1;
-
 let interpolators = [];
 
 // Any files, data or graphic, that need to be used immediately should
@@ -34,7 +31,7 @@ function setup() {
 
   for (let row = 0; row < rowCount; row++) {
     let initialValue = dataTable.getRow(row).getNum(1);
-    interpolators[row] = new Integrator(initialValue, 0.9, 0.1);
+    interpolators[row] = new Integrator(initialValue);
   }
 
   smooth();
@@ -53,12 +50,6 @@ let closestTextY;
 function draw() {
   background(255);
   image(mapImage, 0, 0);
-
-  if (!loading && loaded && loadingTable !== null) {
-    dataTable = loadingTable;
-    loadingTable = null;
-    loaded = false;
-  }
 
   for (let row = 0; row < rowCount; row++) {
     interpolators[row].update();
@@ -105,7 +96,7 @@ function drawData(x, y, abbrev) {
   if ((d < radius + 2) && (d < closestDist)) {
     closestDist = d;
     let name = nameTable.findRow(abbrev, 0).getString(1);
-    closestText = name + " " + nfp(v, 0, 2);
+    closestText = name + " " + nfp(interpolators[row].target(), 0, 2);
     closestTextX = x;
     closestTextY = y - radius - 4;
   }
