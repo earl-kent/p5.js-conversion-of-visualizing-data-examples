@@ -114,10 +114,10 @@ function updateTable() {
     randomCount = 1;
   }
 
-  // Note, that this simulates making an asyncronous call to get data,
-  // but the endpoint is different from Fry's Visualizing Data
-  // (instead local files are used), because CORS permisions don't
-  // allow http://benfry.com/writing/map/random.cgi to be loaded from
+  // Note, this simulates making an asyncronous call to get data, but
+  // the endpoint is different from Fry's Visualizing Data (instead
+  // local files are used), because CORS permisions don't allow
+  // http://benfry.com/writing/map/random.cgi to be loaded from
   // javascript.
   loadTable("data/random0" + String(randomCount) + ".tsv", "tsv", t => {
     loadingTable = t;

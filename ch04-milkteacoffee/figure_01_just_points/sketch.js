@@ -79,15 +79,6 @@ function drawDataPoints(col) {
   // Skip first row, which contains headers.
   for (let row = 1; row < rowCount; row++) {
     let v = data.getNum(row, col);
-    // print('v: ' + v + '; years[row]: ' + years[row]
-    // 	  + '; yearMin: ' + yearMin
-    // 	  + '; yearMax: ' + yearMax
-    // 	  + '; plotX1: ' + plotX1
-    // 	  + '; plotX2: ' + plotX2
-    // 	  + '; dataMin: ' + dataMin
-    // 	  + '; dataMax: ' + dataMax
-    // 	  + '; plotY2: ' + plotY2
-    // 	  + '; plotY1: ' + plotY1);
     let x = map(years[row], yearMin, yearMax, plotX1, plotX2);
     let y = map(v, dataMin, dataMax, plotY2, plotY1);
     point(x, y);
