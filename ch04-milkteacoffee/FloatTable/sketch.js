@@ -37,6 +37,12 @@ function setup() {
 	+ '; data.getRowName(1): ' + data.getRowName(1) + '\n'
 	+ '; data.getRowNames(): ' + data.getRowNames() + '\n'
 	+ '; data.getColumnCount(): ' + data.getColumnCount() + '\n'
+	+ '; data.getColumnMin(0): ' + data.getColumnMin(0) + '\n'
+	+ '; data.getColumnMax(0): ' + data.getColumnMax(0) + '\n'
+	+ '; data.getRowMin(0): ' + data.getRowMin(0) + '\n'
+	+ '; data.getRowMax(0): ' + data.getRowMax(0) + '\n'
+	+ '; data.getTableMin(): ' + data.getTableMin() + '\n'
+	+ '; data.getTableMax(): ' + data.getTableMax() + '\n'
 	// should be 5
 	+ '; data.getRowIndex("1915"): ' + data.getRowIndex('1915') + '\n'
 	// should be -1
