@@ -12,17 +12,19 @@
 class FloatTable {
 
   // to be used in p5.js preload.
-  constructor(textTable) {
-    this.columnNames = Array.from({ length: textTable.getColumnCount() - 1 },
-				  (_, c) => textTable.getString(0, c + 1));
+  constructor(tableName) {
+    loadTable(tableName, (textTable) => {
+      this.columnNames = Array.from({ length: textTable.getColumnCount() - 1 },
+				    (_, c) => textTable.getString(0, c + 1));
 
-    this.rowNames = Array.from({ length: textTable.getRowCount() - 1 },
-			       (_, r) => textTable.getString(r + 1, 0));
+      this.rowNames = Array.from({ length: textTable.getRowCount() - 1 },
+				 (_, r) => textTable.getString(r + 1, 0));
 
-    this.data = Array.from({ length: textTable.getRowCount() - 1 }, (_, r) =>
-      Float64Array.from(
-	Array.from({ length: textTable.getColumnCount() - 1 },
-		   (_, c) => Number(textTable.getString(r + 1, c + 1)))));
+      this.data = Array.from({ length: textTable.getRowCount() - 1 }, (_, r) =>
+	Float64Array.from(
+	  Array.from({ length: textTable.getColumnCount() - 1 },
+		     (_, c) => Number(textTable.getString(r + 1, c + 1)))));
+    });
   }
 
   // Number of rows excluding headers, i.e.

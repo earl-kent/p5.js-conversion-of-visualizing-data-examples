@@ -1,7 +1,9 @@
 
 
 function preload() {
-  data = loadTable("milk-tea-coffee.tsv");
+  // data = loadTable("milk-tea-coffee.tsv");
+  data = new FloatTable("milk-tea-coffee.tsv");
+
 }
 
 function isValid(data, row, col, rowCount) {
@@ -29,8 +31,6 @@ function getTableMax(table) {
 
 function setup() {
   createCanvas(720, 405);
-
-  data = new FloatTable(data);
 
   print('data.getRowCount(): ' + data.getRowCount() + '\n'
 	+ '; data.getRowName(0): ' + data.getRowName(0) + '\n'
