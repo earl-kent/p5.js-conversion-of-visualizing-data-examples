@@ -52,7 +52,7 @@ function setup() {
 
 
 function draw() {
-  background(255);
+  background(224);
 
   // Show the plot area as a white box
   fill(255);
@@ -74,7 +74,7 @@ function drawTitle() {
   textSize(20);
   textAlign(LEFT);
   let title = data.getColumnName(currentColumn);
-  text(title, plotX1, plotY1 - 10);
+  text(title, plotX1, plotY1 - 25);
 }
 
 
@@ -90,7 +90,7 @@ function drawYearLabels() {
   for (let row = 0; row < rowCount; row++) {
     if (years[row] % yearInterval == 0) {
       let x = map(years[row], yearMin, yearMax, plotX1, plotX2);
-      text(years[row], x, plotY2 + 5);
+      text(years[row], x, plotY2 + 10);
     }
   }
 }

@@ -52,7 +52,7 @@ function setup() {
 
 
 function draw() {
-  background(255);
+  background(224);
 
   // Show the plot area as a white box
   fill(255);
@@ -74,7 +74,7 @@ function drawTitle() {
   textSize(20);
   textAlign(LEFT);
   let title = data.getColumnName(currentColumn);
-  text(title, plotX1, plotY1 - 10);
+  text(title, plotX1, plotY1 - 25);
 }
 
 

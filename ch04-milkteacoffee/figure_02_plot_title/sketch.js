@@ -48,7 +48,7 @@ function setup() {
 
 
 function draw() {
-  background(255);
+  background(224);
 
   // Show the plot area as a white box
   fill(255);
