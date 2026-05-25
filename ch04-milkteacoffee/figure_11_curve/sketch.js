@@ -215,7 +215,7 @@ function drawDataCurve(col) {
       //ellipse(x, y, 5, 5);  // only change for ellipses
       curveVertex(x, y);
       // double the curve points for the start and stop
-      if ((row == 0) || (row == rowCount-1)) {
+      if ((row == 0) || (row == rowCount - 1)) {
         curveVertex(x, y);
       }
     // }
