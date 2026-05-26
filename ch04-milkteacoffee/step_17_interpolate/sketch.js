@@ -312,7 +312,6 @@ function drawDataArea(col) {
   for (let row = 0; row < rowCount; row++) {
     // if (data.isValid(row, col)) {
       let v = interpolators[row].value();
-      //print(v);
       //value = data.getFloat(row, col);
       x = map(years[row], yearMin, yearMax, plotX1, plotX2);
       y = map(v, dataMin, dataMax, plotY2, plotY1);
