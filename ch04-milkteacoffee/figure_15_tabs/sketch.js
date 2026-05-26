@@ -50,7 +50,7 @@ function setup() {
   labelY = height - 25;
 
   dataMin = 0;
-  dataMax = data.getTableMax();
+  dataMax = ceil(data.getTableMax() / volumeInterval) * volumeInterval;
 
 
   textFont(plotFont);
@@ -60,17 +60,23 @@ function setup() {
 
 
 function draw() {
-  background(255);
+  background(224);
+
+  // Show the plot area as a white box
+  fill(255);
+  rectMode(CORNERS);
+  noStroke();
+  rect(plotX1, plotY1, plotX2, plotY2);
 
   drawTitleTabs();
   drawAxisLabels();
+  drawYearLabels();
   drawVolumeLabels();
 
   noStroke();
   fill('#5679C1');
-  drawDataBars(currentColumn);
+  drawDataArea(currentColumn);
 
-  drawYearLabels();
 }
 
 
@@ -166,7 +172,7 @@ function drawYearLabels() {
     if (years[row] % yearInterval == 0) {
       let x = map(years[row], yearMin, yearMax, plotX1, plotX2);
       text(years[row], x, plotY2 + textAscent() + 10);
-      // line(x, plotY1, x, plotY2);
+      line(x, plotY1, x, plotY2);
     }
   }
 }
@@ -195,7 +201,7 @@ function drawVolumeLabels() {
         text(floor(v), plotX1 - 10, y + textOffset);
         line(plotX1 - 4, y, plotX1, y);     // Draw major tick
       } else {
-        line(plotX1 - 2, y, plotX1, y);     // Draw minor tick
+        //line(plotX1 - 2, y, plotX1, y);     // Draw minor tick
       }
     }
   }
