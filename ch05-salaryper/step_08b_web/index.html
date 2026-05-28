@@ -6,10 +6,27 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <main>
-    </main>
-    <script src="integrator.js"></script>
-    <script src="FloatTable.js"></script>
-    <script src="sketch.js"></script>
+      <main>
+      </main>
+
+      <script type="module">
+       import { parse, format } from "https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm";
+       // expose to p5 sketch
+       window.parse = parse;
+       window.format = format;
+       console.log(window.parse("10/05/2024", "dd/MM/yyyy", new Date()));
+      </script>
+
+
+      <!-- <script type="module"> -->
+      <!--   import { parse } from "https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm"; -->
+
+      <!--   console.log(parse("10/05/2024", "dd/MM/yyyy", new Date())); -->
+      <!-- </script> -->
+
+
+      <script src="integrator.js"></script>
+      <script src="FloatTable.js"></script>
+      <script src="sketch.js"></script>
   </body>
 </html>

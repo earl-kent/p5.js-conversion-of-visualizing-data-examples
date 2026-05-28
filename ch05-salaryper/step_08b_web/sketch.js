@@ -65,14 +65,44 @@ let minDateIndex = 10;
 // This is the maximum date that can be viewed.
 let maxDateIndex;
 
-// This format makes "20070704" from the date July 4, 2007.
-// let stampFormat = new SimpleDateFormat("yyyyMMdd");
-let stampFormat = parse("10/05/2024", "dd/MM/yyyy", new Date());
 
 
-// This format makes "4 July 2007" from the same.
-// let prettyFormat = new SimpleDateFormat("d MMMM yyyy");
-let prettyFormat = parse("10/05/2024", "dd/MM/yyyy", new Date());
+function preload() {
+  // // p5.js will now wait for this specific promise to resolve!
+  // importModule("https://jsdelivr.net")
+  //   .then(module => {
+  //     dateFns = module;
+  //   });
+}
+
+
+let stampFormat;
+let prettyFormat;
+
+
+//Note, that the following two function call functions from the
+//Javascript module, date-fns. These functions are attached to the
+//HTML document, 'window' in a script tag in the project HTML. We are
+//guaranteed that they have been attached because p5.js provides the
+//guarantee that the entire document has been parsed before preload
+//and setup are run, and all script tags must be processed before
+//parsing is complete.
+
+// This format makes a date from a string, e.g. "20070704"
+function stampFormatParse(dateString) {
+  return window.parse(dateString, "yyyyMMdd", new Date());
+}
+
+// This writes a string from a date, e.g. "4 July 2007"
+function dateFormatWrite(date) {
+  return window.format(date, "d MMMM yyyy");
+}
+
+
+function setup() {
+  print(setupDates());
+}
+
 
 // All dates for the season formatted with stampFormat.
 let dateStamp;
@@ -82,9 +112,9 @@ let datePretty;
 
 function setupDates() {
   try {
-    let firstDate = stampFormat.parse(firstDateStamp);
+    let firstDate = stampFormatParse(firstDateStamp);
     let firstDateMillis = firstDate.getTime();
-    let lastDate = stampFormat.parse(lastDateStamp);
+    let lastDate = stampFormatParse(lastDateStamp);
     let lastDateMillis = lastDate.getTime();
 
     // Calculate number of days by dividing the total milliseconds
@@ -92,8 +122,8 @@ function setupDates() {
     dateCount = (int)
       ((lastDateMillis - firstDateMillis) / MILLIS_PER_DAY) + 1;
     maxDateIndex = dateCount;
-    dateStamp = new String[dateCount];
-    datePretty = new String[dateCount];
+    dateStamp = new Array(dateCount);
+    datePretty = new Array(dateCount);
 
     todayDateStamp = year() + nf(month(), 2) + nf(day(), 2);
     // Another option to do this, but more code
@@ -102,73 +132,21 @@ function setupDates() {
 
     for (let i = 0; i < dateCount; i++) {
       let date = new Date(firstDateMillis + MILLIS_PER_DAY*i);
-      datePretty[i] = prettyFormat.format(date);
-      dateStamp[i] = stampFormat.format(date);
+      datePretty[i] = dateFormatWrite(date);
+      dateStamp[i] = dateFormatWrite(date);
       // If this value for 'date' is equal to today, then set the previous
       // day as the maximum viewable date, because it means the season is
       // still ongoing. The previous day is used because unless it is late
       // in the evening, the updated numbers for the day will be unavailable
       // or incomplete.
-      if (dateStamp[i].equals(todayDateStamp)) {
-        maxDateIndex = i-1;
+      if (dateStamp[i] === todayDateStamp) {
+        maxDateIndex = i - 1;
       }
     }
   } catch (e) {
     print("Problem while setting up dates", e);
   }
 }
-
-
-// Register a custom loader *before* setup/draw run
-p5.prototype.registerPreloadMethod('importModule');
-
-let dateFns; // Global variable to store your imported tools
-
-function preload() {
-  // p5.js will now wait for this specific promise to resolve!
-  importModule("https://jsdelivr.net")
-    .then(module => {
-      dateFns = module;
-    });
-}
-
-
-
-function setup() {
-  print(setupDates());
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 let data;
@@ -248,7 +226,7 @@ function setupAlt() {
 }
 
 
-function draw() {
+function drawAlt() {
   background(224);
 
   // Show the plot area as a white box
