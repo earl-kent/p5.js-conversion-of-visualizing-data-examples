@@ -8,6 +8,13 @@
   <body>
     <main>
     </main>
+
+<script type="module">
+  import { myFunc } from "./foo.js";
+  window.myFunc = myFunc; // expose to p5 sketch
+</script>
+
+    
     <script src="integrator.js"></script>
     <script src="FloatTable.js"></script>
     <script src="sketch.js"></script>

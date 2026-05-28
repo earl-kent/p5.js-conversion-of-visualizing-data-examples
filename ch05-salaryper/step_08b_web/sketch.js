@@ -22,7 +22,7 @@
 // permission given above, feel free to contact us at
 // permissions@oreilly.com.
 
-import { parse } from "https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm";
+// import { parse } from "https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm";
 
 
 
@@ -114,14 +114,29 @@ function setupDates() {
       }
     }
   } catch (e) {
-    die("Problem while setting up dates", e);
+    print("Problem while setting up dates", e);
   }
 }
 
 
+// Register a custom loader *before* setup/draw run
+p5.prototype.registerPreloadMethod('importModule');
+
+let dateFns; // Global variable to store your imported tools
+
+function preload() {
+  // p5.js will now wait for this specific promise to resolve!
+  importModule("https://jsdelivr.net")
+    .then(module => {
+      dateFns = module;
+    });
+}
 
 
 
+function setup() {
+  print(setupDates());
+}
 
 
 
@@ -187,7 +202,7 @@ let plotFont;
 // Any files, data or graphic, that need to be used immediately should
 // be loaded in preload, which ensure the resource is full loaded and
 // available before any code in setup is run.
-function preload() {
+function preloadAlt() {
   // data = loadTable("data/milk-tea-coffee.tsv");
   // data = loadTable("data/milk-tea-coffee.tsv");
   data = new FloatTable("data/milk-tea-coffee.tsv");
@@ -195,7 +210,7 @@ function preload() {
 }
 
 
-function setup() {
+function setupAlt() {
   createCanvas(720, 405);
 
   rowCount = data.getRowCount();
