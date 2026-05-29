@@ -98,17 +98,10 @@ function dateFormatWrite(date) {
   return window.format(date, "d MMMM yyyy");
 }
 
-
-function setup() {
-  print(setupDates());
-}
-
-
 // All dates for the season formatted with stampFormat.
 let dateStamp;
 // All dates in the season formatted with prettyFormat.
 let datePretty;
-
 
 function setupDates() {
   try {
@@ -119,8 +112,7 @@ function setupDates() {
 
     // Calculate number of days by dividing the total milliseconds
     // between the first and last dates by the number of milliseconds per day
-    dateCount = (int)
-      ((lastDateMillis - firstDateMillis) / MILLIS_PER_DAY) + 1;
+    dateCount = floor((lastDateMillis - firstDateMillis) / MILLIS_PER_DAY) + 1;
     maxDateIndex = dateCount;
     dateStamp = new Array(dateCount);
     datePretty = new Array(dateCount);
@@ -147,6 +139,164 @@ function setupDates() {
     print("Problem while setting up dates", e);
   }
 }
+
+
+let lines, salariesLines;
+
+function preload() {
+  // data = new FloatTable("data/milk-tea-coffee.tsv");
+  // plotFont = loadFont("data/LiberationSans-Regular.ttf");
+  teamsLines = loadTable("data/teams.tsv");
+  salariesLines = loadStrings("data/salaries.tsv");
+}
+
+
+function setup() {
+  createCanvas(720, 405);
+
+  setupTeams();
+  setupDates();
+  setupSalaries();
+  // Load the standings after the salaries, because salary
+  // will be used as the tie-breaker when sorting.
+  // setupStandings();
+  // setupRanking();
+  // setupLogos();
+
+  // font = createFont("Georgia", 12);
+  // textFont(font);
+
+  // frameRate(15);
+  // // Use today as the current day
+  // setDate(maxDateIndex);
+}
+
+
+function setupTeams() {
+  teamCount = teamsLines.getRowCount();
+  teamCodes = new Array(teamCount);
+  teamNames = new Array(teamCount);
+  teamIndices = new Array();
+
+  for (let i = 0; i < teamCount; i++) {
+    // let pieces = split(teamsLines[i], TAB);
+    teamCodes[i] = teamsLines.getString(i, 0)
+    teamNames[i] = teamsLines.getString(i, 1)
+    teamIndices[teamCodes[i]] = i;
+  }
+}
+
+
+function teamIndex(teamCode) {
+  let index = teamIndices[teamCode];
+  return index;
+}
+
+
+function setupSalaries() {
+  salaries = new SalaryList(salariesLines);
+}
+
+
+
+
+//. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+
+class SalaryList extends RankedList {
+  constructor(lines) {
+    super(teamCount, false);
+
+
+    for (let i = 0; i < teamCount; i++) {
+      let pieces = split(lines[i], "\t");
+
+      // First column is the team 2-3 digit team code.
+      let index = teamIndex(pieces[0]);
+
+      // Second column is the salary as a number.
+      this.value[index] = parseInt(pieces[1]);
+
+      // Make the title in the format $NN,NNN,NNN
+      let salary = this.value[index];
+      this.title[index] = "$" + nfc(salary);
+    }
+    this.update();
+  }
+}
+
+// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+
+class StandingsList extends RankedList {
+
+  constructor(lines) {
+    super(teamCount, false);
+
+    for (let i = 0; i < teamCount; i++) {
+      let pieces = split(lines[i], TAB);
+      let index = teamIndex(pieces[0]);
+      let wins = parseInt(pieces[1]);
+      letlosses = parseInt(pieces[2]);
+
+      value[index] = wins / (wins + losses);
+      title[index] = wins + "-" + losses;
+    }
+    update();
+  }
+
+  compare(a, b) {
+    // First compare based on the record of both teams
+    let amt = super.compare(a, b);
+    // If the record is not identical, return the difference
+    if (amt !== 0) return amt;
+
+    // If records are equal, use salary as tie-breaker.
+    // In this case, a and b are switched, because a higher
+    // salary is a negative thing, unlike the values above.
+    return salaries.compare(a, b);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 let data;
