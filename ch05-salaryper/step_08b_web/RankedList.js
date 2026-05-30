@@ -88,13 +88,9 @@ class RankedList {
       this.rank[this.order[i]] = i;
     }
 
-    print("value: " + value);
     // Calculate minimum and maximum values
     this.minValue = this.min(value);
     this.maxValue = this.max(value);
-
-    // this.minValue = PApplet.min(value);
-    // this.maxValue = PApplet.max(value);
   }
 
 

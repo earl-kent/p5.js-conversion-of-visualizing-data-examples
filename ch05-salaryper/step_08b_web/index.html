@@ -9,6 +9,37 @@
       <main>
       </main>
 
+      <script>
+
+	// Replace with the gamePk you want
+	const gamePk = 715693;
+
+	async function getWinLoss(gamePk) {
+	  const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
+
+	  const res = await fetch(url);
+	  if (!res.ok) throw new Error("Failed to fetch boxscore");
+
+	  const data = await res.json();
+
+	  // Home and away team objects
+	  const home = data.teams.home;
+	  const away = data.teams.away;
+
+	  return {
+	    homeTeam: home.team.name,
+	    homeRecord: `${home.team.record.wins}-${home.team.record.losses}`,
+
+	    awayTeam: away.team.name,
+	    awayRecord: `${away.team.record.wins}-${away.team.record.losses}`
+	  };
+	}
+
+	getWinLoss(gamePk)
+          .then(console.log)
+          .catch(console.error);
+      </script>
+
       <script type="module">
        import { parse, format } from "https://cdn.jsdelivr.net/npm/date-fns@3.6.0/+esm";
        // expose to p5 sketch
