@@ -145,6 +145,7 @@ function setupDates() {
 
 
 let lines, salariesLines;
+let gameData;
 
 function preload() {
   // data = new FloatTable("data/milk-tea-coffee.tsv");
@@ -154,12 +155,13 @@ function preload() {
   salariesLines = loadStrings("data/salaries.tsv");
   // setupStandings();
 
+  gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
   // Return the Promise so p5 waits for it
-  return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
-    .then(res => res.json())
-    .then(json => {
-      gameData = json;   // store result for setup()
-    });
+  // return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
+  //   .then(res => res.json())
+  //   .then(json => {
+  //     gameData = json;   // store result for setup()
+  //   });
 }
 
 
@@ -171,7 +173,7 @@ function setup() {
   setupSalaries();
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
-  setupStandings();
+  // setupStandings();
   // setupRanking();
   // setupLogos();
 

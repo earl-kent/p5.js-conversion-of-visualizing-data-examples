@@ -20,7 +20,7 @@
 	  if (!res.ok) throw new Error("Failed to fetch schedule");
 
 	  const data = await res.json();
-	  console.log("Raw schedule data:", data); // helpful if structure changes
+	  // console.log("Raw schedule data:", data); // helpful if structure changes
 
 	  const game = data.dates?.[0]?.games?.[0];
 	  if (!game) throw new Error("Game not found in schedule response");
@@ -39,7 +39,7 @@
 	  };
 	}
 
-	getWinLoss(gamePk).then(console.log).catch(console.error);
+	// getWinLoss(gamePk).then(console.log).catch(console.error);
 
       </script>
 
