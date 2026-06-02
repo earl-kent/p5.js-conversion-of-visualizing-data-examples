@@ -10,34 +10,37 @@
       </main>
 
       <script>
-
-	// Replace with the gamePk you want
-	const gamePk = 715693;
+	// Pick any valid MLB gamePk
+	const gamePk = 745742; // Example: change to another gamePk if you want
 
 	async function getWinLoss(gamePk) {
-	  const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
+	  const url = `https://statsapi.mlb.com/api/v1/schedule?gamePk=${gamePk}`;
 
 	  const res = await fetch(url);
-	  if (!res.ok) throw new Error("Failed to fetch boxscore");
+	  if (!res.ok) throw new Error("Failed to fetch schedule");
 
 	  const data = await res.json();
+	  console.log("Raw schedule data:", data); // helpful if structure changes
 
-	  // Home and away team objects
-	  const home = data.teams.home;
-	  const away = data.teams.away;
+	  const game = data.dates?.[0]?.games?.[0];
+	  if (!game) throw new Error("Game not found in schedule response");
+
+	  const home = game.teams.home;
+	  const away = game.teams.away;
+
+	  const homeRec = home.leagueRecord;
+	  const awayRec = away.leagueRecord;
 
 	  return {
 	    homeTeam: home.team.name,
-	    homeRecord: `${home.team.record.wins}-${home.team.record.losses}`,
-
+	    homeRecord: `${homeRec.wins}-${homeRec.losses}`,
 	    awayTeam: away.team.name,
-	    awayRecord: `${away.team.record.wins}-${away.team.record.losses}`
+	    awayRecord: `${awayRec.wins}-${awayRec.losses}`
 	  };
 	}
 
-	getWinLoss(gamePk)
-          .then(console.log)
-          .catch(console.error);
+	getWinLoss(gamePk).then(console.log).catch(console.error);
+
       </script>
 
       <script type="module">

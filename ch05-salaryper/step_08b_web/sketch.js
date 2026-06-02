@@ -152,12 +152,20 @@ function preload() {
   setupDates();
   teamsLines = loadTable("data/teams.tsv");
   salariesLines = loadStrings("data/salaries.tsv");
-  setupStandings();
+  // setupStandings();
+
+  // Return the Promise so p5 waits for it
+  return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
+    .then(res => res.json())
+    .then(json => {
+      gameData = json;   // store result for setup()
+    });
 }
 
 
 function setup() {
   createCanvas(720, 405);
+  console.log("Data is ready:", gameData); // guaranteed defined
 
   setupTeams();
   setupSalaries();
@@ -288,10 +296,10 @@ function acquireStandings(stamp_or_year, month, day) {
     // File file = new File(path);
     if (!file.exists()) {
       println("Downloading standings file " + filename);
-      PrintWriter writer = createWriter(path);
+      let writer = createWriter(path);
 
-      String base = "http://mlb.mlb.com/components/game" +
-	"/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
+      let base = "http://mlb.mlb.com/components/game" +
+	  "/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
 
       // American League (AL)
       parseWinLoss(base + "standings_rs_ale.js", writer);
@@ -309,6 +317,37 @@ function acquireStandings(stamp_or_year, month, day) {
     return loadStrings(filename);
   }
 }
+
+
+
+// Replace with the gamePk you want
+// const gamePk = 715693;
+
+// async function getWinLoss(gamePk) {
+//   const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
+
+//   const res = await fetch(url);
+//   if (!res.ok) throw new Error("Failed to fetch boxscore");
+
+//   const data = await res.json();
+
+//   // Home and away team objects
+//   const home = data.teams.home;
+//   const away = data.teams.away;
+
+//   return {
+//     homeTeam: home.team.name,
+//     homeRecord: `${home.team.record.wins}-${home.team.record.losses}`,
+
+//     awayTeam: away.team.name,
+//     awayRecord: `${away.team.record.wins}-${away.team.record.losses}`
+//   };
+// }
+
+// getWinLoss(gamePk)
+//   .then(console.log)
+//   .catch(console.error);
+
 
 
 
