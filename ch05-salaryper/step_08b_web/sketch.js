@@ -321,6 +321,43 @@ function acquireStandings(stamp_or_year, month, day) {
   }
 }
 
+function parseWinLoss(filename, writer, lines) {
+  // let lines = loadStrings(filename);
+  // Pattern p = Pattern.compile("\\s+([\\w\\d]+):\\s'(.*)',?");
+
+  let teamCode = "";
+  let wins = 0;
+  let losses = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    Matcher m = p.matcher(lines[i]);
+
+    if (m.matches()) {
+      String attr = m.group(1);
+      String value = m.group(2);
+
+      if (attr.equals("code")) {
+        teamCode = value;
+      } else if (attr.equals("w")) {
+        wins = parseInt(value);
+      } else if (attr.equals("l")) {
+        losses = parseInt(value);
+      }
+
+    } else {
+      if (lines[i].startsWith("}")) {
+        // this is the end of a group, write these values
+        //println(team + " " + wins + "-" + losses);
+        //set(teamIndex(teamCode), wins, losses);
+        writer.println(teamCode + TAB + wins + TAB + losses);
+      }
+    }
+  }
+}
+
+
+
+
 
 
 // Replace with the gamePk you want
