@@ -8,6 +8,24 @@
   <body>
       <main>
       </main>
+      <button id="go">Download</button>
+      <script>
+	document.getElementById("go").onclick = () => {
+          const blob = new Blob(["Hello world"], { type: "text/plain" });
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "example.txt";
+
+          // Must be in DOM for Safari
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          URL.revokeObjectURL(url);
+	};
+      </script>
 
       <script>
 	// Pick any valid MLB gamePk

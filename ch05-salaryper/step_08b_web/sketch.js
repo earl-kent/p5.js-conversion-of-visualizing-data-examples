@@ -171,6 +171,7 @@ function setup() {
 
   setupTeams();
   setupSalaries();
+
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
   // setupStandings();
