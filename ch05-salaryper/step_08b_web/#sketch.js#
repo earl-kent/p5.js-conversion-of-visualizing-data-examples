@@ -148,6 +148,9 @@ let lines, salariesLines;
 let gameData;
 
 function preload() {
+
+
+
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
   setupDates();
@@ -162,6 +165,10 @@ function preload() {
   //   .then(json => {
   //     gameData = json;   // store result for setup()
   //   });
+
+
+
+
 }
 
 
@@ -822,3 +829,17 @@ print(data.getFloat(row, i) + "\t");
 }
 println();
 */
+
+
+
+
+The MBL API
+
+https://statsapi.mlb.com/api/v1/statTypes
+https://statsapi.mlb.com/api/v1/baseballStats
+https://statsapi.mlb.com/api/v1/sports
+
+
+ https://docs.statsapi.mlb.com/category/getting-started
+
+

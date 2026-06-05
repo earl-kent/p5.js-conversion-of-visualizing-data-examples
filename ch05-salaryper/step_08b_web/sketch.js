@@ -148,6 +148,9 @@ let lines, salariesLines;
 let gameData;
 
 function preload() {
+
+
+
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
   setupDates();
@@ -162,6 +165,10 @@ function preload() {
   //   .then(json => {
   //     gameData = json;   // store result for setup()
   //   });
+
+
+
+
 }
 
 
@@ -171,6 +178,9 @@ function setup() {
 
   setupTeams();
   setupSalaries();
+
+
+
 
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
