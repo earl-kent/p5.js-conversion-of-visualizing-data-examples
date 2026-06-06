@@ -179,9 +179,6 @@ function setup() {
   setupTeams();
   setupSalaries();
 
-
-
-
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
   // setupStandings();
@@ -832,3 +829,15 @@ print(data.getFloat(row, i) + "\t");
 }
 println();
 */
+
+
+
+
+// The MBL API
+
+// https://statsapi.mlb.com/api/v1/statTypes
+// https://statsapi.mlb.com/api/v1/baseballStats
+// https://statsapi.mlb.com/api/v1/sports
+
+
+// https://docs.statsapi.mlb.com/category/getting-started
