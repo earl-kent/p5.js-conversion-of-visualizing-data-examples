@@ -841,3 +841,45 @@ println();
 
 
 // https://docs.statsapi.mlb.com/category/getting-started
+
+
+
+
+
+
+// Replace with the gamePk you want
+const gamePk = 715693;
+
+function getBoxscore(gamePk) {
+  const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch boxscore");
+
+  const data = await res.json();
+
+  // Basic team info
+  const home = data.teams.home;
+  const away = data.teams.away;
+
+  console.log("Home Team:", home.team.name);
+  console.log("Away Team:", away.team.name);
+
+  // Example: print starting pitchers
+  console.log("\nStarting Pitchers:");
+  console.log("Home:", home.pitchers[0]);
+  console.log("Away:", away.pitchers[0]);
+
+  // Example: print first batter in home lineup
+  const firstHomeBatterId = home.battingOrder[0];
+  const firstHomeBatter = home.players[`ID${firstHomeBatterId}`];
+  console.log("\nHome leadoff hitter:", firstHomeBatter.person.fullName);
+
+  return data;
+}
+
+function runGetBoxscore () {
+getBoxscore(gamePk)
+  .then(data => console.log("\nBoxscore loaded."))
+    .catch(console.error);
+}
