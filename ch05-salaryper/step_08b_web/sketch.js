@@ -145,11 +145,12 @@ function setupDates() {
 
 
 let lines, salariesLines;
-let gameData;
+let teams, gameData, gameData2;
 
 function preload() {
 
 
+  runGetBoxscore();
 
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
@@ -159,6 +160,14 @@ function preload() {
   // setupStandings();
 
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
+  gameData2 = loadJSON("https://statsapi.mlb.com/api/v1/game/715693/boxscore");
+  gameData3 = loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
+  teams = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+
+
+
+
+
   // Return the Promise so p5 waits for it
   // return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
   //   .then(res => res.json())
@@ -168,13 +177,52 @@ function preload() {
 
 
 
-
 }
+
+
+
+
+// The resulting standings.tsv file reads:
+// bos 6 4
+// tor 7 5
+// bal 6 6
+// nyy 5 6
+// tb  5 7
+// sea 5 3
+// ana 6 6
+// oak 6 7
+// tex 5 7
+// cle 6 3
+// det 7 5
+// min 7 5
+// cws 5 6
+// kc  3 9
+// atl 8 3
+// nym 7 4
+// fla 6 5
+// phi 3 8
+// was 3 9
+// ari 9 4
+// la  8 4
+// sd  7 5
+// col 5 7
+// sf  3 7
+// cin 7 5
+// mil 6 5
+// stl 6 5
+// hou 4 6
+// pit 4 6
 
 
 function setup() {
   createCanvas(720, 405);
-  console.log("Data is ready:", gameData); // guaranteed defined
+  console.log("gameData data is ready:", gameData); // guaranteed defined
+  console.log("gameData2 data is ready:", gameData2); // guaranteed defined
+  console.log("gameData3 data is ready:", gameData3); // guaranteed defined
+  console.log("teams data is ready:", teams); // guaranteed defined
+
+
+
 
   setupTeams();
   setupSalaries();
@@ -337,11 +385,11 @@ function parseWinLoss(filename, writer, lines) {
   let losses = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    Matcher m = p.matcher(lines[i]);
+    let m = p.matcher(lines[i]);
 
     if (m.matches()) {
-      String attr = m.group(1);
-      String value = m.group(2);
+      let attr = m.group(1);
+      let value = m.group(2);
 
       if (attr.equals("code")) {
         teamCode = value;
@@ -848,9 +896,8 @@ println();
 
 
 // Replace with the gamePk you want
-const gamePk = 715693;
 
-function getBoxscore(gamePk) {
+async function getBoxscore(gamePk) {
   const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
 
   const res = await fetch(url);
@@ -879,7 +926,8 @@ function getBoxscore(gamePk) {
 }
 
 function runGetBoxscore () {
-getBoxscore(gamePk)
-  .then(data => console.log("\nBoxscore loaded."))
+  const gamePk = 715693;
+  getBoxscore(gamePk)
+    .then(data => console.log("\nBoxscore loaded."))
     .catch(console.error);
 }
