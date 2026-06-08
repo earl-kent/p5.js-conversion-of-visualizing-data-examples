@@ -227,6 +227,11 @@ function setup() {
   setupTeams();
   setupSalaries();
 
+
+  // acquireStandings(dateStamp[4]);
+  acquireStandings(3, 4 , 2007);
+
+
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
   // setupStandings();

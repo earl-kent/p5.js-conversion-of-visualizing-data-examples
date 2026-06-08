@@ -145,11 +145,12 @@ function setupDates() {
 
 
 let lines, salariesLines;
-let gameData;
+let teams, gameData, gameData2;
 
 function preload() {
 
 
+  runGetBoxscore();
 
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
@@ -159,6 +160,14 @@ function preload() {
   // setupStandings();
 
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
+  gameData2 = loadJSON("https://statsapi.mlb.com/api/v1/game/715693/boxscore");
+  gameData3 = loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
+  teams = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+
+
+
+
+
   // Return the Promise so p5 waits for it
   // return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
   //   .then(res => res.json())
@@ -168,16 +177,60 @@ function preload() {
 
 
 
-
 }
+
+
+
+
+// The resulting standings.tsv file reads:
+// bos 6 4
+// tor 7 5
+// bal 6 6
+// nyy 5 6
+// tb  5 7
+// sea 5 3
+// ana 6 6
+// oak 6 7
+// tex 5 7
+// cle 6 3
+// det 7 5
+// min 7 5
+// cws 5 6
+// kc  3 9
+// atl 8 3
+// nym 7 4
+// fla 6 5
+// phi 3 8
+// was 3 9
+// ari 9 4
+// la  8 4
+// sd  7 5
+// col 5 7
+// sf  3 7
+// cin 7 5
+// mil 6 5
+// stl 6 5
+// hou 4 6
+// pit 4 6
 
 
 function setup() {
   createCanvas(720, 405);
-  console.log("Data is ready:", gameData); // guaranteed defined
+  console.log("gameData data is ready:", gameData); // guaranteed defined
+  console.log("gameData2 data is ready:", gameData2); // guaranteed defined
+  console.log("gameData3 data is ready:", gameData3); // guaranteed defined
+  console.log("teams data is ready:", teams); // guaranteed defined
+
+
+
 
   setupTeams();
   setupSalaries();
+
+
+  // acquireStandings(dateStamp[4]);
+  acquireStandings(3, 4 , 2007);
+
 
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
@@ -265,7 +318,7 @@ class StandingsList extends RankedList {
       let pieces = split(lines[i], TAB);
       let index = teamIndex(pieces[0]);
       let wins = parseInt(pieces[1]);
-      letlosses = parseInt(pieces[2]);
+      let losses = parseInt(pieces[2]);
 
       value[index] = wins / (wins + losses);
       title[index] = wins + "-" + losses;
@@ -302,28 +355,28 @@ function acquireStandings(stamp_or_year, month, day) {
     let year = stamp_or_year
     let filename = year + nf(month, 2) + nf(day, 2) + ".tsv";
     let path = dataPath(filename);
-    print("path: " + path);
-    // File file = new File(path);
-    if (!file.exists()) {
-      println("Downloading standings file " + filename);
-      let writer = createWriter(path);
+    // print("path: " + path);
+    // // File file = new File(path);
+    // if (!file.exists()) {
+    print("Generating standings file " + filename);
+    // let writer = createWriter(path);
 
-      let base = "http://mlb.mlb.com/components/game" +
-	  "/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
+    // let base = "http://mlb.mlb.com/components/game" +
+    // 	"/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
 
-      // American League (AL)
-      parseWinLoss(base + "standings_rs_ale.js", writer);
-      parseWinLoss(base + "standings_rs_alc.js", writer);
-      parseWinLoss(base + "standings_rs_alw.js", writer);
+    // American League (AL)
+    parseWinLoss(base + "standings_rs_ale.js", writer);
+    parseWinLoss(base + "standings_rs_alc.js", writer);
+    parseWinLoss(base + "standings_rs_alw.js", writer);
 
-      // National League (NL)
-      parseWinLoss(base + "standings_rs_nle.js", writer);
-      parseWinLoss(base + "standings_rs_nlc.js", writer);
-      parseWinLoss(base + "standings_rs_nlw.js", writer);
-
-      writer.flush();
-      writer.close();
-    }
+    // National League (NL)
+    parseWinLoss(base + "standings_rs_nle.js", writer);
+    parseWinLoss(base + "standings_rs_nlc.js", writer);
+    parseWinLoss(base + "standings_rs_nlw.js", writer);
+    
+    writer.flush();
+    writer.close();
+    // }
     return loadStrings(filename);
   }
 }
@@ -337,11 +390,11 @@ function parseWinLoss(filename, writer, lines) {
   let losses = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    Matcher m = p.matcher(lines[i]);
+    let m = p.matcher(lines[i]);
 
     if (m.matches()) {
-      String attr = m.group(1);
-      String value = m.group(2);
+      let attr = m.group(1);
+      let value = m.group(2);
 
       if (attr.equals("code")) {
         teamCode = value;
@@ -833,13 +886,53 @@ println();
 
 
 
-The MBL API
+// The MBL API
 
-https://statsapi.mlb.com/api/v1/statTypes
-https://statsapi.mlb.com/api/v1/baseballStats
-https://statsapi.mlb.com/api/v1/sports
-
-
- https://docs.statsapi.mlb.com/category/getting-started
+// https://statsapi.mlb.com/api/v1/statTypes
+// https://statsapi.mlb.com/api/v1/baseballStats
+// https://statsapi.mlb.com/api/v1/sports
 
 
+// https://docs.statsapi.mlb.com/category/getting-started
+
+
+
+
+
+
+// Replace with the gamePk you want
+
+async function getBoxscore(gamePk) {
+  const url = `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch boxscore");
+
+  const data = await res.json();
+
+  // Basic team info
+  const home = data.teams.home;
+  const away = data.teams.away;
+
+  console.log("Home Team:", home.team.name);
+  console.log("Away Team:", away.team.name);
+
+  // Example: print starting pitchers
+  console.log("\nStarting Pitchers:");
+  console.log("Home:", home.pitchers[0]);
+  console.log("Away:", away.pitchers[0]);
+
+  // Example: print first batter in home lineup
+  const firstHomeBatterId = home.battingOrder[0];
+  const firstHomeBatter = home.players[`ID${firstHomeBatterId}`];
+  console.log("\nHome leadoff hitter:", firstHomeBatter.person.fullName);
+
+  return data;
+}
+
+function runGetBoxscore () {
+  const gamePk = 715693;
+  getBoxscore(gamePk)
+    .then(data => console.log("\nBoxscore loaded."))
+    .catch(console.error);
+}
