@@ -145,10 +145,36 @@ function setupDates() {
 
 
 let lines, salariesLines;
-let teams, gameData, gameData2;
+let teams, gameData, gameData2, standingsFor240601;
+
+
+let tempDivision;
+let teamRecords = [];
 
 function preload() {
+  // legue information
+  let americanLegue = 103;
+  let nationalLegue = 104;
+  // https://statsapi.mlb.com/api/v1/league
 
+  let leagues = [103, 104];
+
+  for (const league of leagues) {
+    loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
+	     `season=2024&date=2024-06-01&leagueId=${league}&standingsType=regularSeason`,
+	     (data) =>
+	     {
+	       for (const rec of data.records) {
+		 for (const teamRec of rec.teamRecords) {
+		   teamRecords.push(teamRec);
+		 }
+	       }
+	     });
+  }
+
+  // Standings information
+  standingsFor240601 =
+    loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
 
   runGetBoxscore();
 
@@ -161,12 +187,8 @@ function preload() {
 
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
   gameData2 = loadJSON("https://statsapi.mlb.com/api/v1/game/715693/boxscore");
-  gameData3 = loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
+
   teams = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
-
-
-
-
 
   // Return the Promise so p5 waits for it
   // return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
@@ -174,9 +196,6 @@ function preload() {
   //   .then(json => {
   //     gameData = json;   // store result for setup()
   //   });
-
-
-
 }
 
 
@@ -218,24 +237,25 @@ function setup() {
   createCanvas(720, 405);
   console.log("gameData data is ready:", gameData); // guaranteed defined
   console.log("gameData2 data is ready:", gameData2); // guaranteed defined
-  console.log("gameData3 data is ready:", gameData3); // guaranteed defined
+  console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
   console.log("teams data is ready:", teams); // guaranteed defined
-
-
-
 
   setupTeams();
   setupSalaries();
 
-
   // acquireStandings(dateStamp[4]);
-  acquireStandings(3, 4 , 2007);
-
+  //   acquireStandings(3, 4 , 2007);
 
   // Load the standings after the salaries, because salary
   // will be used as the tie-breaker when sorting.
+
+
+  let season_3_4_2007 = new StandingsList(standingsFor240601);
+
+
   // setupStandings();
-  // setupRanking();
+
+  setupRanking();
   // setupLogos();
 
   // font = createFont("Georgia", 12);
@@ -282,6 +302,14 @@ function setupStandings() {
   }
 }
 
+function setupRanking() {
+  for (let i = 0; i < teamCodes.length; i++) {
+    standingsPosition[i] = new Integrator(i);
+  }
+}
+
+
+
 //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 class SalaryList extends RankedList {
@@ -311,14 +339,14 @@ class SalaryList extends RankedList {
 
 class StandingsList extends RankedList {
 
-  constructor(lines) {
+  constructor(standingsForDateTable) {
     super(teamCount, false);
 
     for (let i = 0; i < teamCount; i++) {
       let pieces = split(lines[i], TAB);
       let index = teamIndex(pieces[0]);
       let wins = parseInt(pieces[1]);
-      letlosses = parseInt(pieces[2]);
+      let losses = parseInt(pieces[2]);
 
       value[index] = wins / (wins + losses);
       title[index] = wins + "-" + losses;
@@ -355,28 +383,28 @@ function acquireStandings(stamp_or_year, month, day) {
     let year = stamp_or_year
     let filename = year + nf(month, 2) + nf(day, 2) + ".tsv";
     let path = dataPath(filename);
-    print("path: " + path);
-    // File file = new File(path);
-    if (!file.exists()) {
-      println("Downloading standings file " + filename);
-      let writer = createWriter(path);
+    // print("path: " + path);
+    // // File file = new File(path);
+    // if (!file.exists()) {
+    print("Generating standings file " + filename);
+    // let writer = createWriter(path);
 
-      let base = "http://mlb.mlb.com/components/game" +
-	  "/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
+    // let base = "http://mlb.mlb.com/components/game" +
+    // 	"/year_" + year + "/month_" + nf(month, 2) + "/day_" + nf(day, 2) + "/";
 
-      // American League (AL)
-      parseWinLoss(base + "standings_rs_ale.js", writer);
-      parseWinLoss(base + "standings_rs_alc.js", writer);
-      parseWinLoss(base + "standings_rs_alw.js", writer);
+    // American League (AL)
+    parseWinLoss(base + "standings_rs_ale.js", writer);
+    parseWinLoss(base + "standings_rs_alc.js", writer);
+    parseWinLoss(base + "standings_rs_alw.js", writer);
 
-      // National League (NL)
-      parseWinLoss(base + "standings_rs_nle.js", writer);
-      parseWinLoss(base + "standings_rs_nlc.js", writer);
-      parseWinLoss(base + "standings_rs_nlw.js", writer);
+    // National League (NL)
+    parseWinLoss(base + "standings_rs_nle.js", writer);
+    parseWinLoss(base + "standings_rs_nlc.js", writer);
+    parseWinLoss(base + "standings_rs_nlw.js", writer);
 
-      writer.flush();
-      writer.close();
-    }
+    writer.flush();
+    writer.close();
+    // }
     return loadStrings(filename);
   }
 }
@@ -891,6 +919,10 @@ println();
 // https://statsapi.mlb.com/api/v1/statTypes
 // https://statsapi.mlb.com/api/v1/baseballStats
 // https://statsapi.mlb.com/api/v1/sports
+
+
+// divisions information
+// https://statsapi.mlb.com/api/v1/divisions?leagueId=103
 
 
 // https://docs.statsapi.mlb.com/category/getting-started
