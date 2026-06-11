@@ -39,9 +39,9 @@ const TOP_PADDING = 40;
 let salaries;
 let standings;
 
-let season, standingsPosition;
+let season, standingsPosition = [];
 
-let logos;
+let logos = [];
 let logoWidth, logoHeight;
 
 let font;
@@ -176,7 +176,7 @@ function preload() {
   standingsFor240601 =
     loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
 
-  runGetBoxscore();
+  // runGetBoxscore();
 
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
@@ -250,7 +250,7 @@ function setup() {
   // will be used as the tie-breaker when sorting.
 
 
-  let season_3_4_2007 = new StandingsList(standingsFor240601);
+  // let season_3_4_2007 = new StandingsList(standingsFor240601);
 
 
   // setupStandings();
@@ -306,6 +306,15 @@ function setupRanking() {
   for (let i = 0; i < teamCodes.length; i++) {
     standingsPosition[i] = new Integrator(i);
   }
+}
+
+function setupLogos() {
+  logos = [];
+  for (int i = 0; i < teamCount; i++) {
+    logos[i] = loadImage("data/small/" + teamCodes[i] + ".gif");
+  }
+  logoWidth = logos[0].width / 2.0f;
+  logoHeight = logos[0].height / 2.0f;
 }
 
 
