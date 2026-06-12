@@ -39,7 +39,7 @@ const TOP_PADDING = 40;
 let salaries;
 let standings;
 
-let season, standingsPosition = [];
+let season = [], standingsPosition = [];
 
 let logos = [];
 let logoWidth, logoHeight;
@@ -158,6 +158,14 @@ function preload() {
   // https://statsapi.mlb.com/api/v1/league
 
   let leagues = [103, 104];
+  setupDates();
+
+
+  for (let i = minDateIndex; i <= maxDateIndex; i++) {
+    let lines = acquireStandings(dateStamp[i]);
+    season[i] = new StandingsList(lines);
+  }
+
 
   for (const league of leagues) {
     loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
@@ -180,8 +188,13 @@ function preload() {
 
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
-  setupDates();
-  teamsLines = loadTable("data/teams.tsv");
+  teamsLines = loadTable("data/teams.tsv",
+			 (data) =>
+			 {
+			   setupTeams(data);
+			   setupLogos();
+			 }
+			);
   salariesLines = loadStrings("data/salaries.tsv");
   // setupStandings();
 
@@ -197,7 +210,6 @@ function preload() {
   //     gameData = json;   // store result for setup()
   //   });
 }
-
 
 
 
@@ -240,7 +252,6 @@ function setup() {
   console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
   console.log("teams data is ready:", teams); // guaranteed defined
 
-  setupTeams();
   setupSalaries();
 
   // acquireStandings(dateStamp[4]);
@@ -256,27 +267,24 @@ function setup() {
   // setupStandings();
 
   setupRanking();
-  // setupLogos();
 
-  // font = createFont("Georgia", 12);
-  // textFont(font);
+  font = textFont("Georgia", 12);
 
-  // frameRate(15);
-  // // Use today as the current day
-  // setDate(maxDateIndex);
+  frameRate(15);
+  // Use today as the current day
+  setDate(maxDateIndex);
 }
 
 
-function setupTeams() {
-  teamCount = teamsLines.getRowCount();
+function setupTeams(lines) {
+  teamCount = lines.getRowCount();
   teamCodes = new Array(teamCount);
   teamNames = new Array(teamCount);
   teamIndices = new Array();
 
   for (let i = 0; i < teamCount; i++) {
-    // let pieces = split(teamsLines[i], TAB);
-    teamCodes[i] = teamsLines.getString(i, 0)
-    teamNames[i] = teamsLines.getString(i, 1)
+    teamCodes[i] = lines.getString(i, 0)
+    teamNames[i] = lines.getString(i, 1)
     teamIndices[teamCodes[i]] = i;
   }
 }
@@ -309,13 +317,26 @@ function setupRanking() {
 }
 
 function setupLogos() {
-  logos = [];
-  for (int i = 0; i < teamCount; i++) {
+  for (let i = 0; i < teamCount; i++) {
     logos[i] = loadImage("data/small/" + teamCodes[i] + ".gif");
   }
-  logoWidth = logos[0].width / 2.0f;
-  logoHeight = logos[0].height / 2.0f;
+  logoWidth = logos[0].width / 2.0;
+  logoHeight = logos[0].height / 2.0;
 }
+
+
+
+function setDate(index) {
+  dateIndex = index;
+  standings = season[dateIndex];
+
+  for (let i = 0; i < teamCount; i++) {
+    standingsPosition[i].target(standings.getRank(i));
+  }
+  // Re-enable the animation loop
+  // loop();
+}
+
 
 
 
