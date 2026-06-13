@@ -160,9 +160,12 @@ function preload() {
   let leagues = [103, 104];
   setupDates();
 
+  let date = stampFormatParse(firstDateStamp);
 
   for (let i = minDateIndex; i <= maxDateIndex; i++) {
     console.log("i:", i);
+    date.setDate(date.getDate() + 1);
+    console.log(date)
   }
 
 
