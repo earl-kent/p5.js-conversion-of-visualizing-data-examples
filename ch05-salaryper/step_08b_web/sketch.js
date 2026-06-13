@@ -162,8 +162,7 @@ function preload() {
 
 
   for (let i = minDateIndex; i <= maxDateIndex; i++) {
-    let lines = acquireStandings(dateStamp[i]);
-    season[i] = new StandingsList(lines);
+    console.log("i:", i);
   }
 
 
