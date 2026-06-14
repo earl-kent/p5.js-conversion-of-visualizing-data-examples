@@ -165,23 +165,33 @@ function preload() {
   for (let i = minDateIndex; i <= maxDateIndex; i++) {
     console.log("i:", i);
     date.setDate(date.getDate() + 1);
-    console.log(date)
+    console.log(date);
+    console.log(window.format(date, "yyyy-mm-dd"));
   }
 
+  date = stampFormatParse(firstDateStamp);
+  let dateString;
 
   for (const league of leagues) {
-    loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
-	     `season=2024&date=2024-06-01&leagueId=${league}&standingsType=regularSeason`,
-	     (data) =>
-	     {
-	       for (const rec of data.records) {
-		 for (const teamRec of rec.teamRecords) {
-		   teamRecords.push(teamRec);
-		 }
-	       }
-	     });
+    for (let i = minDateIndex; i <= maxDateIndex; i++) {
+      date.setDate(date.getDate() + 1);
+      dateString = window.format(date, "yyyy-MM-dd");
+      // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
+      // 	       `season=2024&date=2024-06-01&leagueId=${league}&standingsType=regularSeason`,
+      console.log(`https://statsapi.mlb.com/api/v1/standings?` +
+		  `season=2007&date=${dateString}&leagueId=${league}&standingsType=regularSeason`);
+      // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
+      // 	       `season=2007&date=${dateString}&leagueId=${league}&standingsType=regularSeason`,
+      // 	       (data) =>
+      // 	       {
+      // 		 for (const rec of data.records) {
+      // 		   for (const teamRec of rec.teamRecords) {
+      // 		     teamRecords.push(teamRec);
+      // 		   }
+      // 		 }
+      // 	       });
+    }
   }
-
   // Standings information
   standingsFor240601 =
     loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
