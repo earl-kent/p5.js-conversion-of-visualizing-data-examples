@@ -49,8 +49,11 @@ let font;
 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 
-let firstDateStamp = "20070401";
-let lastDateStamp = "20070930";
+// let firstDateStamp = "20070401";
+// let lastDateStamp = "20070930";
+// 2024&date=2024-06-01
+let firstDateStamp = "20240401";
+let lastDateStamp = "20240930";
 let todayDateStamp;
 
 const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -179,7 +182,7 @@ function preload() {
       // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
       // 	       `season=2024&date=2024-06-01&leagueId=${league}&standingsType=regularSeason`,
       console.log(`https://statsapi.mlb.com/api/v1/standings?` +
-		  `season=2007&date=${dateString}&leagueId=${league}&standingsType=regularSeason`);
+		  `season=2024&date=${dateString}&leagueId=${league}&standingsType=regularSeason`);
       // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
       // 	       `season=2007&date=${dateString}&leagueId=${league}&standingsType=regularSeason`,
       // 	       (data) =>
