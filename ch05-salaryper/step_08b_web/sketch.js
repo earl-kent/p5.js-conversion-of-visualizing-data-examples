@@ -197,6 +197,7 @@ function preload() {
   }
 
 
+
   // Standings information
   standingsFor240601 =
     loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
