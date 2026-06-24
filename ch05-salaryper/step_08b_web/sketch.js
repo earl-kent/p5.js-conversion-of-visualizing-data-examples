@@ -165,18 +165,19 @@ function preload() {
 
   let date = stampFormatParse(firstDateStamp);
 
-  for (let i = minDateIndex; i <= maxDateIndex; i++) {
-    console.log("i:", i);
-    date.setDate(date.getDate() + 1);
-    console.log(date);
-    console.log(window.format(date, "yyyy-mm-dd"));
-  }
+  // for (let i = minDateIndex; i <= maxDateIndex; i++) {
+  //   console.log("i:", i);
+  //   date.setDate(date.getDate() + 1);
+  //   console.log(date);
+  //   console.log(window.format(date, "yyyy-mm-dd"));
+  // }
 
   let dateString;
 
   for (const league of leagues) {
     date = stampFormatParse(firstDateStamp);
-    for (let i = minDateIndex; i <= maxDateIndex; i++) {
+    // for (let i = minDateIndex; i <= maxDateIndex; i++) {
+    for (let i = minDateIndex; i <= 11; i++) {
       date.setDate(date.getDate() + 1);
       dateString = window.format(date, "yyyy-MM-dd");
       // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
@@ -187,6 +188,8 @@ function preload() {
 		  `season=2024&date=${dateString}&leagueId=${league}&standingsType=regularSeason`,
 	       (data) =>
 	       {
+		 console.log("data:");
+		 console.log(data);
 		 for (const rec of data.records) {
 		   for (const teamRec of rec.teamRecords) {
 		     teamRecords.push(teamRec);
