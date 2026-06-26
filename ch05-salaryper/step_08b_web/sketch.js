@@ -172,6 +172,7 @@ function preload() {
   //   console.log(window.format(date, "yyyy-mm-dd"));
   // }
 
+
   let dateString;
 
   for (const league of leagues) {
