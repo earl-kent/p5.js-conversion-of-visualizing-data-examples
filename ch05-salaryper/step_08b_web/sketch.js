@@ -382,7 +382,56 @@ function setupLogos() {
   logoHeight = logos[0].height / 2.0;
 }
 
+function draw() {
+  background(255);
+  smooth();
 
+  // drawDateSelector();
+
+  translate(SIDE_PADDING, TOP_PADDING);
+
+  let updated = false;
+  for (let i = 0; i < teamCount; i++) {
+    // if (standingsPosition[i].update()) {
+    //   updated = true;
+    // }
+  }
+  if (!updated) {
+    // noLoop();
+  }
+
+  for (int i = 0; i < teamCount; i++) {
+    //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
+    let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
+
+    image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
+
+    textAlign(LEFT, CENTER);
+    text(teamNames[i], 28, standingsY);
+
+    textAlign(RIGHT, CENTER);
+    fill(128);
+    text(standings.getTitle(i), 150, standingsY);
+
+    float weight = map(salaries.getValue(i),
+                       salaries.getMinValue(), salaries.getMaxValue(),
+                       0.25f, 6);
+    strokeWeight(weight);
+
+    float salaryY = salaries.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
+    if (salaryY >= standingsY) {
+      stroke(33, 85, 156);  // Blue for positive (or equal) difference.
+    } else {
+      stroke(206, 0, 82);   // Red for wasting money.
+    }
+
+    line(160, standingsY, 325, salaryY);
+
+    fill(128);
+    textAlign(LEFT, CENTER);
+    text(salaries.getTitle(i), 335, salaryY);
+  }
+}
 
 function setDate(index) {
   dateIndex = index;
