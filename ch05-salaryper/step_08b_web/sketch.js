@@ -400,18 +400,31 @@ function draw() {
     // noLoop();
   }
 
-  for (int i = 0; i < teamCount; i++) {
+  let standingsPosition = [];
+  let teamCount = 5;
+  let teamNames = ["a", "b", "c", "d", "e"];
+  let standings = [];
+  let
+  for (let i = 0; i < teamCount; i++) {
+    let item = {};
+    item.value = i;
+    standingsPosition[i].value = i;
+    standings_getTitle[i] = 'title';
+  }
+
+  for (let i = 0; i < teamCount; i++) {
     //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
     let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
 
     image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
-    textAlign(LEFT, CENTER);
+    textAlign('LEFT', 'CENTER');
     text(teamNames[i], 28, standingsY);
 
-    textAlign(RIGHT, CENTER);
+    textAlign('RIGHT', 'CENTER');
     fill(128);
-    text(standings.getTitle(i), 150, standingsY);
+    // text(standings.getTitle(i), 150, standingsY);
+    text(standings_getTitle[i], 150, standingsY);
 
     float weight = map(salaries.getValue(i),
                        salaries.getMinValue(), salaries.getMaxValue(),
