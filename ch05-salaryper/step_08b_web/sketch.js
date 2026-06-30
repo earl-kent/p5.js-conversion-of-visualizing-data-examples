@@ -404,6 +404,7 @@ function draw() {
   let teamCount = 5;
   let teamNames = ["a", "b", "c", "d", "e"];
   let standings = [];
+  let salaries = [11, 12, 13, 14, 15];
   let
   for (let i = 0; i < teamCount; i++) {
     let item = {};
@@ -426,7 +427,7 @@ function draw() {
     // text(standings.getTitle(i), 150, standingsY);
     text(standings_getTitle[i], 150, standingsY);
 
-    float weight = map(salaries.getValue(i),
+    let weight = map(salaries.getValue(i),
                        salaries.getMinValue(), salaries.getMaxValue(),
                        0.25f, 6);
     strokeWeight(weight);
