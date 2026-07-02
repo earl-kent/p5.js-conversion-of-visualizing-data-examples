@@ -330,7 +330,7 @@ function setup() {
 
   frameRate(15);
   // Use today as the current day
-  setDate(maxDateIndex);
+  // setDate(maxDateIndex);
 }
 
 
@@ -382,7 +382,13 @@ function setupLogos() {
   logoHeight = logos[0].height / 2.0;
 }
 
+function getRank(arr, index) {
+  return arr.filter(x => x > arr[index]).length + 1;
+}
+
 function draw() {
+  let teamCount = 5;
+
   background(255);
   smooth();
 
@@ -401,16 +407,18 @@ function draw() {
   }
 
   let standingsPosition = [];
-  let teamCount = 5;
   let teamNames = ["a", "b", "c", "d", "e"];
   let standings = [];
   let salaries = [11, 12, 13, 14, 15];
-  let
+  let standings_getTitle = [];
+  let salaries_getTitle = [];
+
   for (let i = 0; i < teamCount; i++) {
     let item = {};
     item.value = i;
-    standingsPosition[i].value = i;
-    standings_getTitle[i] = 'title';
+    standingsPosition[i] = item;
+    standings_getTitle[i] = 'standings title' + i;
+    salaries_getTitle[i] = 'salaries title ' + i
   }
 
   for (let i = 0; i < teamCount; i++) {
@@ -419,20 +427,20 @@ function draw() {
 
     image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
-    textAlign('LEFT', 'CENTER');
+    textAlign(LEFT, CENTER);
     text(teamNames[i], 28, standingsY);
 
-    textAlign('RIGHT', 'CENTER');
+    textAlign(RIGHT, CENTER);
     fill(128);
     // text(standings.getTitle(i), 150, standingsY);
     text(standings_getTitle[i], 150, standingsY);
 
-    let weight = map(salaries.getValue(i),
-                       salaries.getMinValue(), salaries.getMaxValue(),
-                       0.25f, 6);
+    let weight = map(salaries[i],
+                     Math.min(...salaries), Math.max(...salaries),
+                       0.25, 6);
     strokeWeight(weight);
 
-    float salaryY = salaries.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
+    let salaryY = (getRank(salaries, i) * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     if (salaryY >= standingsY) {
       stroke(33, 85, 156);  // Blue for positive (or equal) difference.
     } else {
@@ -443,7 +451,7 @@ function draw() {
 
     fill(128);
     textAlign(LEFT, CENTER);
-    text(salaries.getTitle(i), 335, salaryY);
+    text(salaries_getTitle[i], 335, salaryY);
   }
 }
 
@@ -452,7 +460,7 @@ function setDate(index) {
   standings = season[dateIndex];
 
   for (let i = 0; i < teamCount; i++) {
-    standingsPosition[i].target(standings.getRank(i));
+    standingsPosition[i].target(getRank(standings, i));
   }
   // Re-enable the animation loop
   // loop();
