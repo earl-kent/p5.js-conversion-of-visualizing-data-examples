@@ -452,6 +452,9 @@ function draw() {
     line(160, standingsY, 325, salaryY);
 
     fill(128);
+
+    strokeWeight(1);
+    stroke(255,255,255)
     textAlign(LEFT, CENTER);
     text(salaries_getTitle[i], 335, salaryY);
   }
