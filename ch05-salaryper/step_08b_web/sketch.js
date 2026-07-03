@@ -416,7 +416,9 @@ function draw() {
   for (let i = 0; i < teamCount; i++) {
     let item = {};
     item.value = i;
-    standingsPosition[i] = item;
+    // standingsPosition[i] = item;
+    standingsPosition[i] = new Integrator(i);
+    standingsPosition[i].value = i;
     standings_getTitle[i] = 'standings title' + i;
     salaries_getTitle[i] = 'salaries title ' + i
   }
