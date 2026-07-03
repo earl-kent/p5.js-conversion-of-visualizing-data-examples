@@ -409,7 +409,7 @@ function draw() {
   let standingsPosition = [];
   let teamNames = ["a", "b", "c", "d", "e"];
   let standings = [];
-  let salaries = [11, 12, 13, 14, 15];
+  let salaries = [13, 15, 11, 12, 14];
   let standings_getTitle = [];
   let salaries_getTitle = [];
 
