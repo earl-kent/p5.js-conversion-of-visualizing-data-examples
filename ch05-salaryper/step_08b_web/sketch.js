@@ -386,6 +386,10 @@ function getRank(arr, index) {
   return arr.filter(x => x > arr[index]).length + 1;
 }
 
+function getTitle(standing) {
+  return standing[1] + '-' + standing[2]
+}
+
 function draw() {
   let teamCount = 5;
 
@@ -419,7 +423,8 @@ function draw() {
     // standingsPosition[i] = item;
     standingsPosition[i] = new Integrator(i);
     standingsPosition[i].value = i;
-    standings_getTitle[i] = 'standings title' + i;
+    // standings_getTitle[i] = 'standings title' + i;
+    standings_getTitle[i] =  pseudoStandings[i][0]
     salaries_getTitle[i] = 'salaries title ' + i
   }
 
@@ -430,12 +435,12 @@ function draw() {
     image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
     textAlign(LEFT, CENTER);
-    text(teamNames[i], 28, standingsY);
+    text(pseudoStandings[i][0], 28, standingsY);
 
     textAlign(RIGHT, CENTER);
     fill(128);
     // text(standings.getTitle(i), 150, standingsY);
-    text(standings_getTitle[i], 150, standingsY);
+    text(getTitle(pseudoStandings[i]), 150, standingsY);
 
     let weight = map(salaries[i],
                      Math.min(...salaries), Math.max(...salaries),
