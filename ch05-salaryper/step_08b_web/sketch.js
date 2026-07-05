@@ -266,7 +266,7 @@ function preload() {
 // hou 4 6
 // pit 4 6
 
-let pseudoStandings;
+let pseudoStandings, pseudoSalaries;
 
 function setup() {
   createCanvas(720, 405);
@@ -307,6 +307,45 @@ function setup() {
      ["stl", 6, 5],
      ["hou", 4, 6],
      ["pit", 4, 6]];
+
+
+  pseudoSalarise =
+    [143026214, // ["bos", 6, 4],
+     ["tor", 7, 5],
+     93554808, // ["bal", 6, 6],
+     189639045, // ["nyy", 5, 6],
+     ["tb",  5, 7],
+     106460833, // ["sea", 5, 3],
+     ["ana", 6, 6],
+     ["oak", 6, 7],
+     ["tex", 5, 7],
+     ["cle", 6, 3],
+     95180369, // ["det", 7, 5],
+     ["min", 7, 5],
+     108671833 // ["cws", 5, 6],
+     ["kc",  3, 9],
+     ["atl", 8, 3],
+     115231663, //["nym", 7, 4],
+     ["fla", 6, 5],
+     ["phi", 3, 8],
+     ["was", 3, 9],
+     ["ari", 9, 4],
+     109251333 // ["la",  8, 4],
+     ["sd",  7, 5],
+     ["col", 5, 7],
+     ["sf",  3, 7],
+     ["cin", 7, 5],
+     ["mil", 6, 5],
+     ["stl", 6, 5],
+     ["hou", 4, 6],
+     ["pit", 4, 6]];
+
+
+
+
+
+
+
 
 
 
