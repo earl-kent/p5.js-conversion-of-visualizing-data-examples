@@ -266,7 +266,7 @@ function preload() {
 // hou 4 6
 // pit 4 6
 
-let pseudoStandings, pseudoSalaries;
+let pseudoStandings, pseudoSalaries, pseudoTeams;
 
 function setup() {
   createCanvas(720, 405);
@@ -275,6 +275,37 @@ function setup() {
   console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
   console.log("teams data is ready:", teams); // guaranteed defined
 
+  pseudoTeams =
+    [["bos", "Boston"],
+     ["tor", "Toronto"],
+     ["bal", "Baltimore"],
+     ["nyy", "NY Yankees"],
+     ["tb" , "Tampa Bay"],
+     ["sea", "Seattle"],
+     ["ana", "LA Angels"],
+     ["oak", "Oakland"],
+     ["tex", "Texas"],
+     ["cle", "Cleveland"],
+     ["det", "Detroit"],
+     ["min", "Minnesota"],
+     ["cws", "Chi White Sox"],
+     ["kc" , "Kansas City"],
+     ["atl", "Atlanta"],
+     ["nym", "NY Mets"],
+     ["fla", "Florida"],
+     ["phi", "Philadelphia"],
+     ["was", "Washington"],
+     ["ari", "Arizona"],
+     ["la", "LA Dodgers"],
+     ["sd", "San Diego"],
+     ["col", "Colorado"],
+     ["sf", "San Francisco"],
+     ["cin", "Cincinnati"],
+     ["mil", "Milwaukee"],
+     ["stl", "St. Louis"],
+     ["hou", "Houston"],
+     ["pit", "Pittsburgh"],
+     ["chc", "Chi Cubs"]];
 
 
   pseudoStandings =
