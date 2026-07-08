@@ -453,7 +453,7 @@ function getTitle(standing) {
 }
 
 function draw() {
-  let teamCount = 5;
+  let teamCount = 29;
 
   background(255);
   smooth();
@@ -475,7 +475,12 @@ function draw() {
   let standingsPosition = [];
   let teamNames = ["a", "b", "c", "d", "e"];
   let standings = [];
-  let salaries = [13, 15, 11, 12, 14];
+  let salaries = [13, 15, 11, 12, 14,
+		  43, 45, 41, 42, 44,
+		  23, 25, 21, 22, 24,
+		  63, 65, 61, 62, 64,
+		  33, 35, 31, 32, 34,
+		  53, 55, 51, 52];
   let standings_getTitle = [];
   let salaries_getTitle = [];
 
@@ -523,7 +528,8 @@ function draw() {
     strokeWeight(1);
     stroke(255,255,255)
     textAlign(LEFT, CENTER);
-    text(salaries_getTitle[i], 335, salaryY);
+    // text(salaries_getTitle[i], 335, salaryY);
+    text(pseudoSalarise[i], 335, salaryY);
   }
 }
 
