@@ -269,7 +269,7 @@ function preload() {
 let pseudoStandings, pseudoSalaries, pseudoTeams;
 
 function setup() {
-  createCanvas(720, 405);
+  createCanvas(480, 750);
   console.log("gameData data is ready:", gameData); // guaranteed defined
   console.log("gameData2 data is ready:", gameData2); // guaranteed defined
   console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
