@@ -495,6 +495,14 @@ function draw() {
     salaries_getTitle[i] = 'salaries title ' + i
   }
 
+
+  // We iterate through each of the teams. For each team we need:
+  //   1. their standing rank, sandingsPosition[i].value
+  //   2. Their logo, logos[i]
+  //   3. Their teamName, TeamNames[i]
+  //   4. Their full title, standings.getTitle(i)
+  //   5. Their salary, salaries.getValue(i)
+  //   6. Their salaries rank, salaries.getRank(i)
   for (let i = 0; i < teamCount; i++) {
     //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
     let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
@@ -528,10 +536,15 @@ function draw() {
     strokeWeight(1);
     stroke(255,255,255)
     textAlign(LEFT, CENTER);
-    // text(salaries_getTitle[i], 335, salaryY);
-    text(pseudoSalarise[i], 335, salaryY);
+    text(salariesGetTitle(i), 335, salaryY);
   }
 }
+
+
+function salariesGetTitle(index) {
+  return pseudoSalarise[index].toLocaleString();
+}
+
 
 function setDate(index) {
   dateIndex = index;
