@@ -454,8 +454,22 @@ function getTitle(standing) {
 
 let salariesRankIndex, salesRankIndex;
 
-function updateRankIndex(arayValues, rankIndex) {
-  for
+function updateRankIndex(arrayValues, rankIndex) {
+  // An array of arrays
+  // - 0: index
+  // - 1: rank
+  // - 2: value
+  let tempArray = [];
+  for (let i = 0; i < arrayValues.length; i++) {
+    tempArray[i][0] = i;
+    tempArray[i][2] = arrayValues[i];
+  }
+  tempArray.sort((a, b) => a[2] - b[2]);
+  for (let i = 0; i < arrayValues.length; i++) {
+    tempArray[i][1] = i;
+  }
+  tempArray.sort((a, b) => a[0] - b[02]);
+  tempArray.map(row => row.slice(1));
 }
 
 function draw() {
