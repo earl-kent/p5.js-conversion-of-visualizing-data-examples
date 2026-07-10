@@ -452,6 +452,12 @@ function getTitle(standing) {
   return standing[1] + '-' + standing[2]
 }
 
+let salariesRankIndex, salesRankIndex;
+
+function updateRankIndex(arayValues, rankIndex) {
+  for
+}
+
 function draw() {
   let teamCount = 29;
 
@@ -503,6 +509,9 @@ function draw() {
   //   4. Their full title, standings.getTitle(i)
   //   5. Their salary, salaries.getValue(i)
   //   6. Their salaries rank, salaries.getRank(i)
+  //
+  // Note, we use the index into teams.tsv as the canonical index for
+  // the team.
   for (let i = 0; i < teamCount; i++) {
     //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
     let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
