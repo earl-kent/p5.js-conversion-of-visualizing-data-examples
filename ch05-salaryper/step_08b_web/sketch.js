@@ -172,6 +172,7 @@ function preload() {
   //   console.log(window.format(date, "yyyy-mm-dd"));
   // }
 
+  standings = loadTable("data/standings.tsv");
 
   let dateString;
 
@@ -213,7 +214,7 @@ function preload() {
   teamsLines = loadTable("data/teams.tsv",
 			 (data) =>
 			 {
-			   setupTeams(data);
+			   // setupTeams(data);
 			   setupLogos();
 			 }
 			);
@@ -266,7 +267,7 @@ function preload() {
 // hou 4 6
 // pit 4 6
 
-let pseudoStandings, pseudoSalaries, pseudoTeams;
+let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById;
 
 function setup() {
   createCanvas(480, 750);
@@ -340,36 +341,73 @@ function setup() {
      ["pit", 4, 6]];
 
 
-  pseudoSalarise =
-    [143026214, // ["bos", 6, 4],
-     95000000, // ["tor", 7, 5],
-     93554808, // ["bal", 6, 6],
-     189639045, // ["nyy", 5, 6],
-     95000000, // ["tb",  5, 7],
-     106460833, // ["sea", 5, 3],
-     95000000, // ["ana", 6, 6],
-     95000000, // ["oak", 6, 7],
-     95000000, // ["tex", 5, 7],
-     95000000, // ["cle", 6, 3],
-     95180369, // ["det", 7, 5],
-     95000000, // ["min", 7, 5],
-     108671833, // ["cws", 5, 6],
-     95000000, // ["kc",  3, 9],
-     87290833, // ["atl", 8, 3],
-     115231663, //["nym", 7, 4],
-     95000000, // ["fla", 6, 5],
-     89428213, // ["phi", 3, 8],
-     95000000, // ["was", 3, 9],
-     95000000, // ["ari", 9, 4],
-     109251333, // ["la",  8, 4],
-     95000000, // ["sd",  7, 5],
-     95000000, // ["col", 5, 7],
-     90219056, // ["sf",  3, 7],
-     95000000, // ["cin", 7, 5],
-     95000000, // ["mil", 6, 5],
-     90286823, // ["stl", 6, 5],
-     87759000, // ["hou", 4, 6],
-     95000000]; // ["pit", 4, 6]];
+  salariesRankIndex =
+    [["nyy", 189639045],
+     ["bos", 143026214],
+     ["nym", 115231663],
+     ["ana", 109251333],
+     ["cws", 108671833],
+     ["la", 108454524],
+     ["sea", 106460833],
+     ["chc", 99670332],
+     ["det", 95180369],
+     ["bal", 93554808],
+     ["stl", 90286823],
+     ["sf", 90219056],
+     ["phi", 89428213],
+     ["hou", 87759000],
+     ["atl", 87290833],
+     ["tor", 81942800],
+     ["oak", 79366940],
+     ["min", 71439500],
+     ["mil", 70986500],
+     ["cin", 68904980],
+     ["tex", 68318675],
+     ["kc", 67116500],
+     ["cle", 61673267],
+     ["sd", 58110567],
+     ["col", 54424000],
+     ["ari", 52067546],
+     ["pit", 38537833],
+     ["was", 37347500],
+     ["fla", 30507000],
+     ["tb", 24123500]];
+
+  salariesRankById = {};
+  for (let i = 0; i < salariesRankIndex.length; i++) {
+    salariesRankById[salariesRankIndex[i][0]] = i;
+  }
+
+
+    // [143026214, // ["bos", 6, 4],
+    //  95000000, // ["tor", 7, 5],
+    //  93554808, // ["bal", 6, 6],
+    //  189639045, // ["nyy", 5, 6],
+    //  95000000, // ["tb",  5, 7],
+    //  106460833, // ["sea", 5, 3],
+    //  95000000, // ["ana", 6, 6],
+    //  95000000, // ["oak", 6, 7],
+    //  95000000, // ["tex", 5, 7],
+    //  95000000, // ["cle", 6, 3],
+    //  95180369, // ["det", 7, 5],
+    //  95000000, // ["min", 7, 5],
+    //  108671833, // ["cws", 5, 6],
+    //  95000000, // ["kc",  3, 9],
+    //  87290833, // ["atl", 8, 3],
+    //  115231663, //["nym", 7, 4],
+    //  95000000, // ["fla", 6, 5],
+    //  89428213, // ["phi", 3, 8],
+    //  95000000, // ["was", 3, 9],
+    //  95000000, // ["ari", 9, 4],
+    //  109251333, // ["la",  8, 4],
+    //  95000000, // ["sd",  7, 5],
+    //  95000000, // ["col", 5, 7],
+    //  90219056, // ["sf",  3, 7],
+    //  95000000, // ["cin", 7, 5],
+    //  95000000, // ["mil", 6, 5],
+    //  90286823, // ["stl", 6, 5],
+    //  87759000, // ["hou", 4, 6],
+    //  95000000]; // ["pit", 4, 6]];
 
 
   setupSalaries();
@@ -396,24 +434,24 @@ function setup() {
 }
 
 
-function setupTeams(lines) {
-  teamCount = lines.getRowCount();
-  teamCodes = new Array(teamCount);
-  teamNames = new Array(teamCount);
-  teamIndices = new Array();
+// function setupTeams(lines) {
+//   teamCount = lines.getRowCount();
+//   // teamCodes = new Array(teamCount);
+//   teamNames = new Array(teamCount);
+//   // teamIndices = new Array();
 
-  for (let i = 0; i < teamCount; i++) {
-    teamCodes[i] = lines.getString(i, 0)
-    teamNames[i] = lines.getString(i, 1)
-    teamIndices[teamCodes[i]] = i;
-  }
-}
+//   for (let i = 0; i < teamCount; i++) {
+//     // teamCodes[i] = lines.getString(i, 0)
+//     // teamNames[i] = lines.getString(i, 1)
+//     // teamIndices[teamCodes[i]] = i;
+//   }
+// }
 
 
-function teamIndex(teamCode) {
-  let index = teamIndices[teamCode];
-  return index;
-}
+// function teamIndex(teamCode) {
+//   let index = teamIndices[teamCode];
+//   return index;
+// }
 
 
 function setupSalaries() {
@@ -454,22 +492,21 @@ function getTitle(standing) {
 
 let salariesRankIndex, salesRankIndex;
 
-function updateRankIndex(arrayValues, rankIndex) {
+function updateRankIndex(arrayValues) {
   // An array of arrays
   // - 0: index
   // - 1: rank
   // - 2: value
   let tempArray = [];
   for (let i = 0; i < arrayValues.length; i++) {
-    tempArray[i][0] = i;
-    tempArray[i][2] = arrayValues[i];
+    tempArray[i] = [i, , arrayValues[i]];
   }
   tempArray.sort((a, b) => a[2] - b[2]);
   for (let i = 0; i < arrayValues.length; i++) {
     tempArray[i][1] = i;
   }
-  tempArray.sort((a, b) => a[0] - b[02]);
-  tempArray.map(row => row.slice(1));
+  tempArray.sort((a, b) => a[0] - b[0]);
+  return tempArray.map(row => row[1]);
 }
 
 function draw() {
@@ -509,12 +546,11 @@ function draw() {
     item.value = i;
     // standingsPosition[i] = item;
     standingsPosition[i] = new Integrator(i);
-    standingsPosition[i].value = i;
-    // standings_getTitle[i] = 'standings title' + i;
+    standingsPosition[i].value = salariesRankById[standings[i][0]];
+    // print(salariesRankById[teamCodes[i]]);
     standings_getTitle[i] =  pseudoStandings[i][0]
     salaries_getTitle[i] = 'salaries title ' + i
   }
-
 
   // We iterate through each of the teams. For each team we need:
   //   1. their standing rank, sandingsPosition[i].value
@@ -529,7 +565,6 @@ function draw() {
   for (let i = 0; i < teamCount; i++) {
     //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
     let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
-
     image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
     textAlign(LEFT, CENTER);
@@ -565,7 +600,7 @@ function draw() {
 
 
 function salariesGetTitle(index) {
-  return pseudoSalarise[index].toLocaleString();
+  return salariesRankIndex[index][1].toLocaleString();
 }
 
 
