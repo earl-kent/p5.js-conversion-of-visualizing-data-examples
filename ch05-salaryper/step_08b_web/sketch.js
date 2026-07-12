@@ -184,14 +184,14 @@ function preload() {
       dateString = window.format(date, "yyyy-MM-dd");
       // loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
       // 	       `season=2024&date=2024-06-01&leagueId=${league}&standingsType=regularSeason`,
-      console.log(`https://statsapi.mlb.com/api/v1/standings?` +
-		  `season=2024&date=${dateString}&leagueId=${league}&standingsType=regularSeason`);
+      // console.log(`https://statsapi.mlb.com/api/v1/standings?` +
+      // 		  `season=2024&date=${dateString}&leagueId=${league}&standingsType=regularSeason`);
       loadJSON(`https://statsapi.mlb.com/api/v1/standings?` +
 		  `season=2024&date=${dateString}&leagueId=${league}&standingsType=regularSeason`,
 	       (data) =>
 	       {
-		 console.log("data:");
-		 console.log(data);
+		 // console.log("data:");
+		 // console.log(data);
 		 for (const rec of data.records) {
 		   for (const teamRec of rec.teamRecords) {
 		     teamRecords.push(teamRec);
@@ -215,7 +215,7 @@ function preload() {
 			 (data) =>
 			 {
 			   // setupTeams(data);
-			   setupLogos();
+			   // setupLogos();
 			 }
 			);
   salariesLines = loadStrings("data/salaries.tsv");
@@ -267,14 +267,14 @@ function preload() {
 // hou 4 6
 // pit 4 6
 
-let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById;
+let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById, standingsRankById;
 
 function setup() {
   createCanvas(480, 750);
-  console.log("gameData data is ready:", gameData); // guaranteed defined
-  console.log("gameData2 data is ready:", gameData2); // guaranteed defined
-  console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
-  console.log("teams data is ready:", teams); // guaranteed defined
+  // console.log("gameData data is ready:", gameData); // guaranteed defined
+  // console.log("gameData2 data is ready:", gameData2); // guaranteed defined
+  // console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
+  // console.log("teams data is ready:", teams); // guaranteed defined
 
   pseudoTeams =
     [["bos", "Boston"],
@@ -340,7 +340,39 @@ function setup() {
      ["hou", 4, 6],
      ["pit", 4, 6]];
 
+  teamCodes =
+    ["bos",
+     "tor",
+     "bal",
+     "nyy",
+     "tb",
+     "sea",
+     "ana",
+     "oak",
+     "tex",
+     "cle",
+     "det",
+     "min",
+     "cws",
+     "kc",
+     "atl",
+     "nym",
+     "fla",
+     "phi",
+     "was",
+     "ari",
+     "la",
+     "sd",
+     "col",
+     "sf",
+     "cin",
+     "mil",
+     "stl",
+     "hou",
+     "pit"];
 
+
+  print("teamCodes: " + teamCodes);
   salariesRankIndex =
     [["nyy", 189639045],
      ["bos", 143026214],
@@ -373,44 +405,49 @@ function setup() {
      ["fla", 30507000],
      ["tb", 24123500]];
 
-  salariesRankById = {};
+  // Columns:
+  // 0: salary
+  // 1: rank
+  salariesById = {};
   for (let i = 0; i < salariesRankIndex.length; i++) {
-    salariesRankById[salariesRankIndex[i][0]] = i;
+    let item = {};
+    item.rank = i;
+    item.salary = salariesRankIndex[i][1];
+    salariesById[teamCodes[i]] = item
+  }
+
+  let standingsArr = standings.getRows().map(row => row.arr);
+
+  standingsArr.sort((rowA, rowB) => {
+    let winsA = Number(rowA[1]) || 0;
+    let winsB = Number(rowB[1]) || 0;
+    let lossesA = Number(rowA[2]) || 0;
+    let lossesB = Number(rowB[2]) || 0;
+    let advantageA = winsA - lossesA;
+    let advantageB = winsB - lossesB;
+    let advantage = advantageB - advantageA
+    let gamesA = winsA + lossesA;
+    let gamesB = winsB + lossesB;
+
+    if (advantage != 0) {
+      return advantage;
+    } else {
+      // To break wins/losses tie, use number of games played.
+      return gamesB - gamesA;
+    }
+  });
+
+  standingsRankById = {};
+  for (let i = 0; i < standingsArr.length; i++) {
+    standingsRankById[standingsArr[i][0]] = i;
   }
 
 
-    // [143026214, // ["bos", 6, 4],
-    //  95000000, // ["tor", 7, 5],
-    //  93554808, // ["bal", 6, 6],
-    //  189639045, // ["nyy", 5, 6],
-    //  95000000, // ["tb",  5, 7],
-    //  106460833, // ["sea", 5, 3],
-    //  95000000, // ["ana", 6, 6],
-    //  95000000, // ["oak", 6, 7],
-    //  95000000, // ["tex", 5, 7],
-    //  95000000, // ["cle", 6, 3],
-    //  95180369, // ["det", 7, 5],
-    //  95000000, // ["min", 7, 5],
-    //  108671833, // ["cws", 5, 6],
-    //  95000000, // ["kc",  3, 9],
-    //  87290833, // ["atl", 8, 3],
-    //  115231663, //["nym", 7, 4],
-    //  95000000, // ["fla", 6, 5],
-    //  89428213, // ["phi", 3, 8],
-    //  95000000, // ["was", 3, 9],
-    //  95000000, // ["ari", 9, 4],
-    //  109251333, // ["la",  8, 4],
-    //  95000000, // ["sd",  7, 5],
-    //  95000000, // ["col", 5, 7],
-    //  90219056, // ["sf",  3, 7],
-    //  95000000, // ["cin", 7, 5],
-    //  95000000, // ["mil", 6, 5],
-    //  90286823, // ["stl", 6, 5],
-    //  87759000, // ["hou", 4, 6],
-    //  95000000]; // ["pit", 4, 6]];
+
+  // updateRankIndex
 
 
-  setupSalaries();
+  // setupSalaries();
 
   // acquireStandings(dateStamp[4]);
   //   acquireStandings(3, 4 , 2007);
@@ -509,6 +546,8 @@ function updateRankIndex(arrayValues) {
   return tempArray.map(row => row[1]);
 }
 
+let oneBreak = true;
+
 function draw() {
   let teamCount = 29;
 
@@ -546,7 +585,12 @@ function draw() {
     item.value = i;
     // standingsPosition[i] = item;
     standingsPosition[i] = new Integrator(i);
-    standingsPosition[i].value = salariesRankById[standings[i][0]];
+    // standingsPosition[i].value = salariesRankById[standings[i][0]];
+    standingsPosition[i].target(standingsRankById[teamCodes[i]])
+    if (oneBreak) {
+      oneBreak = false;
+      console.log(standingsPosition[i].value);
+    }
     // print(salariesRankById[teamCodes[i]]);
     standings_getTitle[i] =  pseudoStandings[i][0]
     salaries_getTitle[i] = 'salaries title ' + i
@@ -563,9 +607,9 @@ function draw() {
   // Note, we use the index into teams.tsv as the canonical index for
   // the team.
   for (let i = 0; i < teamCount; i++) {
-    //float standingsY = standings.getRank(i)*ROW_HEIGHT + HALF_ROW_HEIGHT;
-    let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
-    image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
+    let standingsY = (standingsRankById[teamCodes[i]] * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    // let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
+    // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
     textAlign(LEFT, CENTER);
     text(pseudoStandings[i][0], 28, standingsY);
@@ -580,7 +624,7 @@ function draw() {
                        0.25, 6);
     strokeWeight(weight);
 
-    let salaryY = (getRank(salaries, i) * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    let salaryY = (salariesById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     if (salaryY >= standingsY) {
       stroke(33, 85, 156);  // Blue for positive (or equal) difference.
     } else {
@@ -594,13 +638,13 @@ function draw() {
     strokeWeight(1);
     stroke(255,255,255)
     textAlign(LEFT, CENTER);
-    text(salariesGetTitle(i), 335, salaryY);
+    text(salariesById[teamCodes[i]].salary.toLocaleString(), 335, salaryY);
   }
 }
 
 
 function salariesGetTitle(index) {
-  return salariesRankIndex[index][1].toLocaleString();
+  return salariesRankById[teamCodes[i]].toLocaleString();
 }
 
 
