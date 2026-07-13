@@ -26,7 +26,7 @@
 
 
 
-let teamCount = 30;
+let teamCount;
 let teamNames, teamCodes;
 let teamIndices;
 
@@ -267,7 +267,7 @@ function preload() {
 // hou 4 6
 // pit 4 6
 
-let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById, standingsRankById;
+let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById, standingsById;
 
 function setup() {
   createCanvas(480, 750);
@@ -371,7 +371,6 @@ function setup() {
      "hou",
      "pit"];
 
-
   print("teamCodes: " + teamCodes);
   salariesRankIndex =
     [["nyy", 189639045],
@@ -437,11 +436,14 @@ function setup() {
     }
   });
 
-  standingsRankById = {};
+  standingsById = {};
   for (let i = 0; i < standingsArr.length; i++) {
-    standingsRankById[standingsArr[i][0]] = i;
+    let item = {};
+    item.rank = i;
+    standingsById[standingsArr[i][0]] = item;
   }
 
+  setupTeams();
 
 
   // updateRankIndex
@@ -471,8 +473,8 @@ function setup() {
 }
 
 
-// function setupTeams(lines) {
-//   teamCount = lines.getRowCount();
+function setupTeams() {
+  teamCount = teamCodes.length;
 //   // teamCodes = new Array(teamCount);
 //   teamNames = new Array(teamCount);
 //   // teamIndices = new Array();
@@ -482,7 +484,7 @@ function setup() {
 //     // teamNames[i] = lines.getString(i, 1)
 //     // teamIndices[teamCodes[i]] = i;
 //   }
-// }
+}
 
 
 // function teamIndex(teamCode) {
@@ -549,7 +551,7 @@ function updateRankIndex(arrayValues) {
 let oneBreak = true;
 
 function draw() {
-  let teamCount = 29;
+  // let teamCount = 29;
 
   background(255);
   smooth();
@@ -586,7 +588,7 @@ function draw() {
     // standingsPosition[i] = item;
     standingsPosition[i] = new Integrator(i);
     // standingsPosition[i].value = salariesRankById[standings[i][0]];
-    standingsPosition[i].target(standingsRankById[teamCodes[i]])
+    standingsPosition[i].target(standingsById[teamCodes[i]].rank)
     if (oneBreak) {
       oneBreak = false;
       console.log(standingsPosition[i].value);
@@ -607,17 +609,17 @@ function draw() {
   // Note, we use the index into teams.tsv as the canonical index for
   // the team.
   for (let i = 0; i < teamCount; i++) {
-    let standingsY = (standingsRankById[teamCodes[i]] * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    let standingsY = (standingsById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     // let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
     // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
     textAlign(LEFT, CENTER);
-    text(pseudoStandings[i][0], 28, standingsY);
+    text(teamCodes[i], 28, standingsY);
 
     textAlign(RIGHT, CENTER);
     fill(128);
     // text(standings.getTitle(i), 150, standingsY);
-    text(getTitle(pseudoStandings[i]), 150, standingsY);
+    text(pseudoStandings[i][1] + '-' + pseudoStandings[i][2], 150, standingsY);
 
     let weight = map(salaries[i],
                      Math.min(...salaries), Math.max(...salaries),
