@@ -338,7 +338,8 @@ function setup() {
      ["mil", 6, 5],
      ["stl", 6, 5],
      ["hou", 4, 6],
-     ["pit", 4, 6]];
+     ["pit", 4, 6],
+     ["chc", 4, 7]];
 
   teamCodes =
     ["bos",
@@ -369,7 +370,8 @@ function setup() {
      "mil",
      "stl",
      "hou",
-     "pit"];
+     "pit",
+     "chc"];
 
   print("teamCodes: " + teamCodes);
   salariesRankIndex =
