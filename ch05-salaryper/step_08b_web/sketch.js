@@ -37,7 +37,6 @@ const SIDE_PADDING = 30;
 const TOP_PADDING = 40;
 
 let salaries;
-let standings;
 
 let season = [], standingsPosition = [];
 
@@ -153,6 +152,7 @@ let teams, gameData, gameData2, standingsFor240601;
 
 let tempDivision;
 let teamRecords = [];
+let standingsTable;
 
 function preload() {
   // legue information
@@ -172,7 +172,7 @@ function preload() {
   //   console.log(window.format(date, "yyyy-mm-dd"));
   // }
 
-  standings = loadTable("data/standings.tsv");
+  standingsTable = loadTable("data/standings.tsv");
 
   let dateString;
 
@@ -200,8 +200,6 @@ function preload() {
 	       });
     }
   }
-
-
 
   // Standings information
   standingsFor240601 =
@@ -234,112 +232,15 @@ function preload() {
   //   });
 }
 
+let pseudoSalaries, salariesById;
+let standingsById, standingsArr;
 
+let maxSalary = 0;
+let minSalary = Number.MAX_VALUE;
 
-// The resulting standings.tsv file reads:
-// bos 6 4
-// tor 7 5
-// bal 6 6
-// nyy 5 6
-// tb  5 7
-// sea 5 3
-// ana 6 6
-// oak 6 7
-// tex 5 7
-// cle 6 3
-// det 7 5
-// min 7 5
-// cws 5 6
-// kc  3 9
-// atl 8 3
-// nym 7 4
-// fla 6 5
-// phi 3 8
-// was 3 9
-// ari 9 4
-// la  8 4
-// sd  7 5
-// col 5 7
-// sf  3 7
-// cin 7 5
-// mil 6 5
-// stl 6 5
-// hou 4 6
-// pit 4 6
-
-let pseudoStandings, pseudoSalaries, pseudoTeams, salariesById, standingsById;
 
 function setup() {
   createCanvas(480, 750);
-  // console.log("gameData data is ready:", gameData); // guaranteed defined
-  // console.log("gameData2 data is ready:", gameData2); // guaranteed defined
-  // console.log("standingsFor240601 data is ready:", standingsFor240601); // guaranteed defined
-  // console.log("teams data is ready:", teams); // guaranteed defined
-
-  pseudoTeams =
-    [["bos", "Boston"],
-     ["tor", "Toronto"],
-     ["bal", "Baltimore"],
-     ["nyy", "NY Yankees"],
-     ["tb" , "Tampa Bay"],
-     ["sea", "Seattle"],
-     ["ana", "LA Angels"],
-     ["oak", "Oakland"],
-     ["tex", "Texas"],
-     ["cle", "Cleveland"],
-     ["det", "Detroit"],
-     ["min", "Minnesota"],
-     ["cws", "Chi White Sox"],
-     ["kc" , "Kansas City"],
-     ["atl", "Atlanta"],
-     ["nym", "NY Mets"],
-     ["fla", "Florida"],
-     ["phi", "Philadelphia"],
-     ["was", "Washington"],
-     ["ari", "Arizona"],
-     ["la", "LA Dodgers"],
-     ["sd", "San Diego"],
-     ["col", "Colorado"],
-     ["sf", "San Francisco"],
-     ["cin", "Cincinnati"],
-     ["mil", "Milwaukee"],
-     ["stl", "St. Louis"],
-     ["hou", "Houston"],
-     ["pit", "Pittsburgh"],
-     ["chc", "Chi Cubs"]];
-
-
-  pseudoStandings =
-    [["bos", 6, 4],
-     ["tor", 7, 5],
-     ["bal", 6, 6],
-     ["nyy", 5, 6],
-     ["tb",  5, 7],
-     ["sea", 5, 3],
-     ["ana", 6, 6],
-     ["oak", 6, 7],
-     ["tex", 5, 7],
-     ["cle", 6, 3],
-     ["det", 7, 5],
-     ["min", 7, 5],
-     ["cws", 5, 6],
-     ["kc",  3, 9],
-     ["atl", 8, 3],
-     ["nym", 7, 4],
-     ["fla", 6, 5],
-     ["phi", 3, 8],
-     ["was", 3, 9],
-     ["ari", 9, 4],
-     ["la",  8, 4],
-     ["sd",  7, 5],
-     ["col", 5, 7],
-     ["sf",  3, 7],
-     ["cin", 7, 5],
-     ["mil", 6, 5],
-     ["stl", 6, 5],
-     ["hou", 4, 6],
-     ["pit", 4, 6],
-     ["chc", 4, 7]];
 
   teamCodes =
     ["bos",
@@ -373,6 +274,40 @@ function setup() {
      "pit",
      "chc"];
 
+
+  teamCodes =
+    ["nyy",
+     "bos",
+     "nym",
+     "ana",
+     "cws",
+     "la",
+     "sea",
+     "chc",
+     "det",
+     "bal",
+     "stl",
+     "sf",
+     "phi",
+     "hou",
+     "atl",
+     "tor",
+     "oak",
+     "min",
+     "mil",
+     "cin",
+     "tex",
+     "kc",
+     "cle",
+     "sd",
+     "col",
+     "ari",
+     "pit",
+     "was",
+     "fla",
+     "tb"];
+
+  print("teamCodes: " + teamCodes);
   salariesRankIndex =
     [["nyy", 189639045],
      ["bos", 143026214],
@@ -413,10 +348,16 @@ function setup() {
     let item = {};
     item.rank = i;
     item.salary = salariesRankIndex[i][1];
-    salariesById[teamCodes[i]] = item
+    salariesById[teamCodes[i]] = item;
+    maxSalary = salariesRankIndex[i][1] > maxSalary ?
+      salariesRankIndex[i][1] :
+      maxSalary;
+    minSalary = salariesRankIndex[i][1] < minSalary ?
+      salariesRankIndex[i][1] :
+      minSalary;
   }
 
-  let standingsArr = standings.getRows().map(row => row.arr);
+  standingsArr = standingsTable.getRows().map(row => row.arr);
 
   standingsArr.sort((rowA, rowB) => {
     let winsA = Number(rowA[1]) || 0;
@@ -441,6 +382,8 @@ function setup() {
   for (let i = 0; i < standingsArr.length; i++) {
     let item = {};
     item.rank = i;
+    item.wins = standingsArr[i][1];
+    item.losses = standingsArr[i][2];
     standingsById[standingsArr[i][0]] = item;
   }
 
@@ -572,30 +515,20 @@ function draw() {
   }
 
   let standingsPosition = [];
-  let teamNames = ["a", "b", "c", "d", "e"];
   let standings = [];
-  let salaries = [13, 15, 11, 12, 14,
-		  43, 45, 41, 42, 44,
-		  23, 25, 21, 22, 24,
-		  63, 65, 61, 62, 64,
-		  33, 35, 31, 32, 34,
-		  53, 55, 51, 52];
   let standings_getTitle = [];
   let salaries_getTitle = [];
 
   for (let i = 0; i < teamCount; i++) {
     let item = {};
     item.value = i;
-    // standingsPosition[i] = item;
     standingsPosition[i] = new Integrator(i);
-    // standingsPosition[i].value = salariesRankById[standings[i][0]];
     standingsPosition[i].target(standingsById[teamCodes[i]].rank)
     if (oneBreak) {
       oneBreak = false;
       console.log(standingsPosition[i].value);
     }
-    // print(salariesRankById[teamCodes[i]]);
-    standings_getTitle[i] =  pseudoStandings[i][0]
+    standings_getTitle[i] =  standingsArr[i][0];
     salaries_getTitle[i] = 'salaries title ' + i
   }
 
@@ -619,12 +552,19 @@ function draw() {
 
     textAlign(RIGHT, CENTER);
     fill(128);
-    // text(standings.getTitle(i), 150, standingsY);
-    text(pseudoStandings[i][1] + '-' + pseudoStandings[i][2], 150, standingsY);
+
+    text(standingsById[teamCodes[i]].wins +
+	 '-' +
+	 standingsById[teamCodes[i]].losses,
+	 150,
+	 standingsY);
 
     let weight = map(salariesById[teamCodes[i]].salary,
-                     Math.min(...salaries), Math.max(...salaries),
-                       0.25, 6);
+		     minSalary,
+		     maxSalary,
+		     0.25,
+		     6);
+
     strokeWeight(weight);
 
     let salaryY = (salariesById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
