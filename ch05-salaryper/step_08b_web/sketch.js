@@ -373,7 +373,6 @@ function setup() {
      "pit",
      "chc"];
 
-  print("teamCodes: " + teamCodes);
   salariesRankIndex =
     [["nyy", 189639045],
      ["bos", 143026214],
@@ -623,7 +622,7 @@ function draw() {
     // text(standings.getTitle(i), 150, standingsY);
     text(pseudoStandings[i][1] + '-' + pseudoStandings[i][2], 150, standingsY);
 
-    let weight = map(salaries[i],
+    let weight = map(salariesById[teamCodes[i]].salary,
                      Math.min(...salaries), Math.max(...salaries),
                        0.25, 6);
     strokeWeight(weight);
