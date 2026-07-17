@@ -389,7 +389,6 @@ function setup() {
 
   setupTeams();
 
-
   // updateRankIndex
 
 
@@ -452,7 +451,7 @@ function setupStandings() {
 }
 
 function setupRanking() {
-  for (let i = 0; i < teamCodes.length; i++) {
+  for (let i = 0; i < teamCount; i++) {
     standingsPosition[i] = new Integrator(i);
   }
 }
@@ -506,30 +505,21 @@ function draw() {
 
   let updated = false;
   for (let i = 0; i < teamCount; i++) {
-    // if (standingsPosition[i].update()) {
-    //   updated = true;
-    // }
+    if (standingsPosition[i].update()) {
+      updated = true;
+    }
   }
   if (!updated) {
-    // noLoop();
+    noLoop();
   }
 
-  let standingsPosition = [];
-  let standings = [];
-  let standings_getTitle = [];
-  let salaries_getTitle = [];
 
   for (let i = 0; i < teamCount; i++) {
-    let item = {};
-    item.value = i;
-    standingsPosition[i] = new Integrator(i);
     standingsPosition[i].target(standingsById[teamCodes[i]].rank)
     if (oneBreak) {
       oneBreak = false;
-      console.log(standingsPosition[i].value);
+      console.log(standingsPosition[i].value());
     }
-    standings_getTitle[i] =  standingsArr[i][0];
-    salaries_getTitle[i] = 'salaries title ' + i
   }
 
   // We iterate through each of the teams. For each team we need:
@@ -596,7 +586,7 @@ function setDate(index) {
   standings = season[dateIndex];
 
   for (let i = 0; i < teamCount; i++) {
-    standingsPosition[i].target(getRank(standings, i));
+    // standingsPosition[i].target(getRank(standings, i));
   }
   // Re-enable the animation loop
   // loop();
