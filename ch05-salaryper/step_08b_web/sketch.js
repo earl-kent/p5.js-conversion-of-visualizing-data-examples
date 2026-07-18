@@ -243,39 +243,6 @@ function setup() {
   createCanvas(480, 750);
 
   teamCodes =
-    ["bos",
-     "tor",
-     "bal",
-     "nyy",
-     "tb",
-     "sea",
-     "ana",
-     "oak",
-     "tex",
-     "cle",
-     "det",
-     "min",
-     "cws",
-     "kc",
-     "atl",
-     "nym",
-     "fla",
-     "phi",
-     "was",
-     "ari",
-     "la",
-     "sd",
-     "col",
-     "sf",
-     "cin",
-     "mil",
-     "stl",
-     "hou",
-     "pit",
-     "chc"];
-
-
-  teamCodes =
     ["nyy",
      "bos",
      "nym",
