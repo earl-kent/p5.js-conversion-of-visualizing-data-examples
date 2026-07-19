@@ -146,8 +146,8 @@ function setupDates() {
 }
 
 
-let lines, salariesLines;
-let teams, gameData, gameData2, standingsFor240601;
+let lines, salariesTable;
+let teams, teamsTable, gameData, gameData2, standingsFor240601;
 
 
 let tempDivision;
@@ -216,13 +216,14 @@ function preload() {
 			   // setupLogos();
 			 }
 			);
-  salariesLines = loadStrings("data/salaries.tsv");
+  salariesTable = loadTable("data/salaries.tsv");
   // setupStandings();
 
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
   gameData2 = loadJSON("https://statsapi.mlb.com/api/v1/game/715693/boxscore");
 
-  teams = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+  teamsJson = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+  teamsTable = loadTable("data/teams.tsv");
 
   // Return the Promise so p5 waits for it
   // return fetch("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01")
@@ -232,8 +233,7 @@ function preload() {
   //   });
 }
 
-let pseudoSalaries, salariesById;
-let standingsById, standingsArr;
+let pseudoSalaries, salariesById, standingsById, standingsArr;
 
 let maxSalary = 0;
 let minSalary = Number.MAX_VALUE;
@@ -242,70 +242,10 @@ let minSalary = Number.MAX_VALUE;
 function setup() {
   createCanvas(480, 750);
 
-  teamCodes =
-    ["nyy",
-     "bos",
-     "nym",
-     "ana",
-     "cws",
-     "la",
-     "sea",
-     "chc",
-     "det",
-     "bal",
-     "stl",
-     "sf",
-     "phi",
-     "hou",
-     "atl",
-     "tor",
-     "oak",
-     "min",
-     "mil",
-     "cin",
-     "tex",
-     "kc",
-     "cle",
-     "sd",
-     "col",
-     "ari",
-     "pit",
-     "was",
-     "fla",
-     "tb"];
+  teamCodes = teamsTable.getRows().map(row => row.arr[0]);
 
-  print("teamCodes: " + teamCodes);
   salariesRankIndex =
-    [["nyy", 189639045],
-     ["bos", 143026214],
-     ["nym", 115231663],
-     ["ana", 109251333],
-     ["cws", 108671833],
-     ["la", 108454524],
-     ["sea", 106460833],
-     ["chc", 99670332],
-     ["det", 95180369],
-     ["bal", 93554808],
-     ["stl", 90286823],
-     ["sf", 90219056],
-     ["phi", 89428213],
-     ["hou", 87759000],
-     ["atl", 87290833],
-     ["tor", 81942800],
-     ["oak", 79366940],
-     ["min", 71439500],
-     ["mil", 70986500],
-     ["cin", 68904980],
-     ["tex", 68318675],
-     ["kc", 67116500],
-     ["cle", 61673267],
-     ["sd", 58110567],
-     ["col", 54424000],
-     ["ari", 52067546],
-     ["pit", 38537833],
-     ["was", 37347500],
-     ["fla", 30507000],
-     ["tb", 24123500]];
+    salariesTable.getRows().map(row => [row.arr[0], Number(row.arr[1])]);
 
   // Columns:
   // 0: salary
