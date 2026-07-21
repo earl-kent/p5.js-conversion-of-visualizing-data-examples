@@ -247,9 +247,6 @@ function setup() {
   salariesRankIndex =
     salariesTable.getRows().map(row => [row.arr[0], Number(row.arr[1])]);
 
-  // Columns:
-  // 0: salary
-  // 1: rank
   salariesById = {};
   for (let i = 0; i < salariesRankIndex.length; i++) {
     let item = {};
@@ -401,12 +398,8 @@ function updateRankIndex(arrayValues) {
 let oneBreak = true;
 
 function draw() {
-  // let teamCount = 29;
-
   background(255);
   smooth();
-
-  // drawDateSelector();
 
   translate(SIDE_PADDING, TOP_PADDING);
 
@@ -419,7 +412,6 @@ function draw() {
   if (!updated) {
     noLoop();
   }
-
 
   for (let i = 0; i < teamCount; i++) {
     standingsPosition[i].target(standingsById[teamCodes[i]].rank)
@@ -443,6 +435,10 @@ function draw() {
     let standingsY = (standingsById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     // let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
     // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
+
+    if (i === 0) {
+      console.log(standingsPosition[i].value());
+    }
 
     textAlign(LEFT, CENTER);
     text(teamCodes[i], 28, standingsY);
