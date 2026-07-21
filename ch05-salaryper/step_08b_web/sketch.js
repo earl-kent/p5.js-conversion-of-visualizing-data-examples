@@ -317,6 +317,9 @@ function setup() {
   frameRate(15);
   // Use today as the current day
   // setDate(maxDateIndex);
+  for (let i = 0; i < teamCount; i++) {
+    standingsPosition[i].target(standingsById[teamCodes[i]].rank)
+  }
 }
 
 
@@ -413,13 +416,6 @@ function draw() {
     noLoop();
   }
 
-  for (let i = 0; i < teamCount; i++) {
-    standingsPosition[i].target(standingsById[teamCodes[i]].rank)
-    if (oneBreak) {
-      oneBreak = false;
-      console.log(standingsPosition[i].value());
-    }
-  }
 
   // We iterate through each of the teams. For each team we need:
   //   1. their standing rank, sandingsPosition[i].value
@@ -437,7 +433,8 @@ function draw() {
     // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
     if (i === 0) {
-      console.log(standingsPosition[i].value());
+      console.log(standingsPosition[i]._value);
+      console.log(standingsPosition[i]._target);
     }
 
     textAlign(LEFT, CENTER);

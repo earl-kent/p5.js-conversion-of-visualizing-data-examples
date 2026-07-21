@@ -1,16 +1,19 @@
 class Integrator {
-  
+
   constructor(value = 100, damping = 0.5, attraction = 0.2) {
     this.force = 0;
     this.vel = 0;
     this.accel = 0;
     this.mass = 1;
-    
+
     this.damping = damping;
     this.attraction = attraction;
-    
+
     this._value = value;
     this._target = value;
+
+    this.prev = Number.MAX_VALUE;
+    this.epsilon = 0.0001;
   }
 
   value(v) {
@@ -31,6 +34,13 @@ class Integrator {
     this._value += this.vel;
 
     this.force = 0;
+
+    if (Math.abs(this._value - this.prev) < this.epsilon) {
+      this._value = this.target;
+      return false;
+    }
+    this.prev = this.value;
+    return true;
   }
 
   target(t) {
