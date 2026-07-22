@@ -412,6 +412,7 @@ function draw() {
       updated = true;
     }
   }
+
   if (!updated) {
     noLoop();
   }
@@ -432,10 +433,10 @@ function draw() {
     // let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
     // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
 
-    if (i === 0) {
-      console.log(standingsPosition[i]._value);
-      console.log(standingsPosition[i]._target);
-    }
+    // if (i === 0) {
+    //   console.log(standingsPosition[i]._value);
+    //   console.log(standingsPosition[i]._target);
+    // }
 
     textAlign(LEFT, CENTER);
     text(teamCodes[i], 28, standingsY);

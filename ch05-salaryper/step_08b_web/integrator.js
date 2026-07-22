@@ -36,10 +36,11 @@ class Integrator {
     this.force = 0;
 
     if (Math.abs(this._value - this.prev) < this.epsilon) {
-      this._value = this.target;
+      this._value = this._target;
       return false;
     }
-    this.prev = this.value;
+
+    this.prev = this._value;
     return true;
   }
 
