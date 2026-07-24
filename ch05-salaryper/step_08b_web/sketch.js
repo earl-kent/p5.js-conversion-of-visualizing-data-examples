@@ -311,7 +311,7 @@ function setup() {
   // setupStandings();
 
   setupRanking();
-
+  setupLogos();
   font = textFont("Georgia", 12);
 
   frameRate(15);
@@ -417,7 +417,6 @@ function draw() {
     noLoop();
   }
 
-
   // We iterate through each of the teams. For each team we need:
   //   1. their standing rank, sandingsPosition[i].value
   //   2. Their logo, logos[i]
@@ -429,14 +428,9 @@ function draw() {
   // Note, we use the index into teams.tsv as the canonical index for
   // the team.
   for (let i = 0; i < teamCount; i++) {
-    let standingsY = (standingsById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
-    // let standingsY = standingsPosition[i].value * ROW_HEIGHT + HALF_ROW_HEIGHT;
-    // image(logos[i], 0, standingsY - logoHeight/2, logoWidth, logoHeight);
-
-    // if (i === 0) {
-    //   console.log(standingsPosition[i]._value);
-    //   console.log(standingsPosition[i]._target);
-    // }
+    // let standingsY = (standingsById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    let standingsY = (standingsPosition[i].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    image(logos[i], 0 , standingsY - (25 / 2), 25, 25);
 
     textAlign(LEFT, CENTER);
     text(teamCodes[i], 28, standingsY);
