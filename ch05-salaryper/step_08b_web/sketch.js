@@ -38,7 +38,7 @@ const TOP_PADDING = 40;
 
 let salaries;
 
-let season = [], standingsPosition = [];
+let season = [], standingsPositionIntegrators = [];
 
 let logos = [];
 let logoWidth, logoHeight;
@@ -239,9 +239,12 @@ let maxSalary = 0;
 let minSalary = Number.MAX_VALUE;
 
 
+let teamCodesNew;
+
 function setup() {
   createCanvas(480, 750);
 
+  teamCodesNew =
   teamCodes = teamsTable.getRows().map(row => row.arr[0]);
 
   salariesRankIndex =
@@ -318,7 +321,7 @@ function setup() {
   // Use today as the current day
   // setDate(maxDateIndex);
   for (let i = 0; i < teamCount; i++) {
-    standingsPosition[i].target(standingsById[teamCodes[i]].rank)
+    standingsPositionIntegrators[i].target(standingsById[teamCodes[i]].rank)
   }
 }
 
@@ -359,7 +362,7 @@ function setupStandings() {
 
 function setupRanking() {
   for (let i = 0; i < teamCount; i++) {
-    standingsPosition[i] = new Integrator(i);
+    standingsPositionIntegrators[i] = new Integrator(i);
   }
 }
 
@@ -408,7 +411,7 @@ function draw() {
 
   let updated = false;
   for (let i = 0; i < teamCount; i++) {
-    if (standingsPosition[i].update()) {
+    if (standingsPositionIntegrators[i].update()) {
       updated = true;
     }
   }
@@ -418,7 +421,7 @@ function draw() {
   }
 
   // We iterate through each of the teams. For each team we need:
-  //   1. their standing rank, sandingsPosition[i].value
+  //   1. their standing rank, sandingsPosition[i].value() --
   //   2. Their logo, logos[i]
   //   3. Their teamName, TeamNames[i]
   //   4. Their full title, standings.getTitle(i)
@@ -428,8 +431,7 @@ function draw() {
   // Note, we use the index into teams.tsv as the canonical index for
   // the team.
   for (let i = 0; i < teamCount; i++) {
-    // let standingsY = (standingsById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
-    let standingsY = (standingsPosition[i].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    let standingsY = (standingsPositionIntegrators[i].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     image(logos[i], 0 , standingsY - (25 / 2), 25, 25);
 
     textAlign(LEFT, CENTER);
@@ -481,7 +483,7 @@ function setDate(index) {
   standings = season[dateIndex];
 
   for (let i = 0; i < teamCount; i++) {
-    // standingsPosition[i].target(getRank(standings, i));
+    // standingsPositionIntegrators[i].target(getRank(standings, i));
   }
   // Re-enable the animation loop
   // loop();
