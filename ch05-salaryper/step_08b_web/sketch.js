@@ -244,7 +244,7 @@ let teamCodesNew;
 function setup() {
   createCanvas(480, 750);
 
-  teamCodesNew =
+  teamCodesNew = teamsJson.teams.map(row => [row.teamCode, row.name]);
   teamCodes = teamsTable.getRows().map(row => row.arr[0]);
 
   salariesRankIndex =
