@@ -147,7 +147,7 @@ function setupDates() {
 
 
 let lines, salariesTable;
-let teams, teamsTable, gameData, gameData2, standingsFor240601;
+let teams, teamsTable, gameData, gameData2, standingsFor240601, standingsFor240601Json;
 
 
 let tempDivision;
@@ -202,7 +202,7 @@ function preload() {
   }
 
   // Standings information
-  standingsFor240601 =
+  standingsFor240601Json =
     loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
 
   // runGetBoxscore();
@@ -222,7 +222,12 @@ function preload() {
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
   gameData2 = loadJSON("https://statsapi.mlb.com/api/v1/game/715693/boxscore");
 
-  teamsJson = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1");
+  teamsJson = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1",
+		       (data) =>
+		       {
+			 teamCodesNew = data.teams.map(row => [row.teamCode, row.name, row.id]);
+		       }
+		      );
   teamsTable = loadTable("data/teams.tsv");
 
   // Return the Promise so p5 waits for it
@@ -239,12 +244,19 @@ let maxSalary = 0;
 let minSalary = Number.MAX_VALUE;
 
 
+// Array of arrays. Each record is:
+// [teamCode, name, id]
 let teamCodesNew;
 
 function setup() {
   createCanvas(480, 750);
 
-  teamCodesNew = teamsJson.teams.map(row => [row.teamCode, row.name]);
+
+  // standingsFor240601Json.records[1].teamRecords[1].team
+  standingsFor240601 = [];
+  standingsFor240601Json.records.map(record =>
+    record.teamRecords.map(teamRecord =>
+      standingsFor240601.push([teamRecord.team.id, teamRecord.wins, teamRecord.losses])));
   teamCodes = teamsTable.getRows().map(row => row.arr[0]);
 
   salariesRankIndex =
