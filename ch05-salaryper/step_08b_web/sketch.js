@@ -245,7 +245,8 @@ let standingsArrNew;
 
 let salariesTableNew;
 
-let teamIdToCode = {};
+let teamCodeById = {};
+let teamNamesByCode = {};
 
 function setup() {
   createCanvas(480, 750);
@@ -253,7 +254,7 @@ function setup() {
 
   teamCodesNew = teamsJson.teams.map(row =>
     {
-      teamIdToCode[row.id] = row.teamCode;
+      teamCodeById[row.id] = row.teamCode;
       return [row.teamCode, row.name, row.id];
     });
 
@@ -261,10 +262,15 @@ function setup() {
   standingsFor240601 = [];
   standingsFor240601Json.records.map(record =>
     record.teamRecords.map(teamRecord =>
-      standingsFor240601.push([teamIdToCode[teamRecord.team.id],
+      standingsFor240601.push([teamCodeById[teamRecord.team.id],
 			       teamRecord.wins,
 			       teamRecord.losses])));
-  teamCodes = teamsTable.getRows().map(row => row.arr[0]);
+
+  teamCodes = teamsTable.getRows().map(row =>
+    {
+      teamNamesByCode[row.arr[0]] = row.arr[1];
+      return row.arr[0];
+    });
 
   salariesRankIndex =
     salariesTable.getRows().map(row => [row.arr[0], Number(row.arr[1])]);
@@ -310,6 +316,7 @@ function setup() {
     item.rank = i;
     item.wins = standingsArr[i][1];
     item.losses = standingsArr[i][2];
+    item.teamName = teamNamesByCode[standingsArr[i][0]];
     standingsById[standingsArr[i][0]] = item;
   }
 
@@ -455,7 +462,7 @@ function draw() {
     image(logos[code], 0 , standingsY - (25 / 2), 25, 25);
 
     textAlign(LEFT, CENTER);
-    text(code, 28, standingsY);
+    text(standingsById[code].teamName, 28, standingsY);
 
     textAlign(RIGHT, CENTER);
     fill(128);
