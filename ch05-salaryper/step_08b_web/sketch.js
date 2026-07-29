@@ -38,10 +38,9 @@ const TOP_PADDING = 40;
 
 let salaries;
 
-let season = [], standingsPositionIntegrators = [];
+let season = [], standingsPositionIntegrators = {};
 
-let logos = [];
-let logoWidth, logoHeight;
+let logos = {};
 
 let font;
 
@@ -209,13 +208,6 @@ function preload() {
 
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
-  teamsLines = loadTable("data/teams.tsv",
-			 (data) =>
-			 {
-			   // setupTeams(data);
-			   // setupLogos();
-			 }
-			);
   salariesTable = loadTable("data/salaries.tsv");
   // setupStandings();
 
@@ -225,7 +217,7 @@ function preload() {
   teamsJson = loadJSON("https://statsapi.mlb.com/api/v1/teams?sportId=1",
 		       (data) =>
 		       {
-			 teamCodesNew = data.teams.map(row => [row.teamCode, row.name, row.id]);
+
 		       }
 		      );
   teamsTable = loadTable("data/teams.tsv");
@@ -244,19 +236,34 @@ let maxSalary = 0;
 let minSalary = Number.MAX_VALUE;
 
 
+// The following need to be swapped in
 // Array of arrays. Each record is:
 // [teamCode, name, id]
 let teamCodesNew;
+
+let standingsArrNew;
+
+let salariesTableNew;
+
+let teamIdToCode = {};
 
 function setup() {
   createCanvas(480, 750);
 
 
+  teamCodesNew = teamsJson.teams.map(row =>
+    {
+      teamIdToCode[row.id] = row.teamCode;
+      return [row.teamCode, row.name, row.id];
+    });
+
   // standingsFor240601Json.records[1].teamRecords[1].team
   standingsFor240601 = [];
   standingsFor240601Json.records.map(record =>
     record.teamRecords.map(teamRecord =>
-      standingsFor240601.push([teamRecord.team.id, teamRecord.wins, teamRecord.losses])));
+      standingsFor240601.push([teamIdToCode[teamRecord.team.id],
+			       teamRecord.wins,
+			       teamRecord.losses])));
   teamCodes = teamsTable.getRows().map(row => row.arr[0]);
 
   salariesRankIndex =
@@ -267,7 +274,7 @@ function setup() {
     let item = {};
     item.rank = i;
     item.salary = salariesRankIndex[i][1];
-    salariesById[teamCodes[i]] = item;
+    salariesById[salariesRankIndex[i][0]] = item;
     maxSalary = salariesRankIndex[i][1] > maxSalary ?
       salariesRankIndex[i][1] :
       maxSalary;
@@ -332,8 +339,8 @@ function setup() {
   frameRate(15);
   // Use today as the current day
   // setDate(maxDateIndex);
-  for (let i = 0; i < teamCount; i++) {
-    standingsPositionIntegrators[i].target(standingsById[teamCodes[i]].rank)
+  for (const code of teamCodes) {
+    standingsPositionIntegrators[code].target(standingsById[code].rank)
   }
 }
 
@@ -373,17 +380,16 @@ function setupStandings() {
 }
 
 function setupRanking() {
-  for (let i = 0; i < teamCount; i++) {
-    standingsPositionIntegrators[i] = new Integrator(i);
+  let i = 0;
+  for (const code of teamCodes) {
+    standingsPositionIntegrators[code] = new Integrator(i++);
   }
 }
 
 function setupLogos() {
-  for (let i = 0; i < teamCount; i++) {
-    logos[i] = loadImage("data/small/" + teamCodes[i] + ".gif");
+  for (const code of teamCodes) {
+    logos[code] = loadImage("data/small/" + code + ".gif");
   }
-  logoWidth = logos[0].width / 2.0;
-  logoHeight = logos[0].height / 2.0;
 }
 
 function getRank(arr, index) {
@@ -422,8 +428,8 @@ function draw() {
   translate(SIDE_PADDING, TOP_PADDING);
 
   let updated = false;
-  for (let i = 0; i < teamCount; i++) {
-    if (standingsPositionIntegrators[i].update()) {
+  for (const code of teamCodes) {
+    if (standingsPositionIntegrators[code].update()) {
       updated = true;
     }
   }
@@ -442,23 +448,25 @@ function draw() {
   //
   // Note, we use the index into teams.tsv as the canonical index for
   // the team.
-  for (let i = 0; i < teamCount; i++) {
-    let standingsY = (standingsPositionIntegrators[i].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
-    image(logos[i], 0 , standingsY - (25 / 2), 25, 25);
+  // for (let i = 0; i < teamCount; i++) {
+  for (const code of teamCodes) {
+
+    let standingsY = (standingsPositionIntegrators[code].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    image(logos[code], 0 , standingsY - (25 / 2), 25, 25);
 
     textAlign(LEFT, CENTER);
-    text(teamCodes[i], 28, standingsY);
+    text(code, 28, standingsY);
 
     textAlign(RIGHT, CENTER);
     fill(128);
 
-    text(standingsById[teamCodes[i]].wins +
+    text(standingsById[code].wins +
 	 '-' +
-	 standingsById[teamCodes[i]].losses,
+	 standingsById[code].losses,
 	 150,
 	 standingsY);
 
-    let weight = map(salariesById[teamCodes[i]].salary,
+    let weight = map(salariesById[code].salary,
 		     minSalary,
 		     maxSalary,
 		     0.25,
@@ -466,7 +474,7 @@ function draw() {
 
     strokeWeight(weight);
 
-    let salaryY = (salariesById[teamCodes[i]].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
+    let salaryY = (salariesById[code].rank * ROW_HEIGHT) + HALF_ROW_HEIGHT;
     if (salaryY >= standingsY) {
       stroke(33, 85, 156);  // Blue for positive (or equal) difference.
     } else {
@@ -480,13 +488,8 @@ function draw() {
     strokeWeight(1);
     stroke(255,255,255)
     textAlign(LEFT, CENTER);
-    text(salariesById[teamCodes[i]].salary.toLocaleString(), 335, salaryY);
+    text(salariesById[code].salary.toLocaleString(), 335, salaryY);
   }
-}
-
-
-function salariesGetTitle(index) {
-  return salariesRankById[teamCodes[i]].toLocaleString();
 }
 
 
