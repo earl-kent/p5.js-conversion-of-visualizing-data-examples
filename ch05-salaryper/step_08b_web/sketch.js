@@ -246,7 +246,9 @@ let standingsArrNew;
 let salariesTableNew;
 
 let teamCodeById = {};
+
 let teamNamesByCode = {};
+let teamNamesByCodeNew = {};
 
 function setup() {
   createCanvas(480, 750);
@@ -255,7 +257,8 @@ function setup() {
   teamCodesNew = teamsJson.teams.map(row =>
     {
       teamCodeById[row.id] = row.teamCode;
-      return [row.teamCode, row.name, row.id];
+      teamNamesByCodeNew[row.teamCode] = row.name;
+      return row.teamCode;
     });
 
   // standingsFor240601Json.records[1].teamRecords[1].team
