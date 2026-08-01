@@ -209,6 +209,7 @@ function preload() {
   // data = new FloatTable("data/milk-tea-coffee.tsv");
   // plotFont = loadFont("data/LiberationSans-Regular.ttf");
   salariesTable = loadTable("data/salaries.tsv");
+  salariesTable26 = loadTable("data/salaries26.tsv");
   // setupStandings();
 
   gameData = loadJSON("https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=2024-04-01");
@@ -245,7 +246,8 @@ let standingsArrNew;
 
 let salariesTableNew;
 
-let teamCodeById = {};
+let teamCodesById = {};
+let teamCodesByName = {};
 
 let teamNamesByCode = {};
 let teamNamesByCodeNew = {};
@@ -256,7 +258,8 @@ function setup() {
 
   teamCodesNew = teamsJson.teams.map(row =>
     {
-      teamCodeById[row.id] = row.teamCode;
+      teamCodesById[row.id] = row.teamCode;
+      teamCodesByName[row.name] = row.teamCode;
       teamNamesByCodeNew[row.teamCode] = row.name;
       return row.teamCode;
     });
@@ -265,7 +268,7 @@ function setup() {
   standingsFor240601 = [];
   standingsFor240601Json.records.map(record =>
     record.teamRecords.map(teamRecord =>
-      standingsFor240601.push([teamCodeById[teamRecord.team.id],
+      standingsFor240601.push([teamCodesById[teamRecord.team.id],
 			       teamRecord.wins,
 			       teamRecord.losses])));
 
@@ -274,6 +277,14 @@ function setup() {
       teamNamesByCode[row.arr[0]] = row.arr[1];
       return row.arr[0];
     });
+
+  salaries26RankIndex =
+    salariesTable26.getRows().map(row =>
+      {
+	return [teamCodesByName[row.arr[0]], Number(row.arr[1])];
+      });
+
+  salaries26RankIndex.sort((rowA, rowB) => rowB[1] - rowA[1]);
 
   salariesRankIndex =
     salariesTable.getRows().map(row => [row.arr[0], Number(row.arr[1])]);
