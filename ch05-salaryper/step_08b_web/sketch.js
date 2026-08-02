@@ -146,7 +146,9 @@ function setupDates() {
 
 
 let lines, salariesTable;
-let teams, teamsTable, gameData, gameData2, standingsFor240601, standingsFor240601Json;
+let teams, teamsTable, gameData, gameData2;
+let standingsFor240601 = [];
+let standingsFor240601Json = {};
 
 
 let tempDivision;
@@ -201,8 +203,18 @@ function preload() {
   }
 
   // Standings information
-  standingsFor240601Json =
-    loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01");
+
+  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01",
+	   (data) =>
+	   {
+	     standingsFor240601Json[103] = data;
+	   });
+
+  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=104&season=2024&date=2024-06-01",
+	   (data) =>
+	   {
+	     standingsFor240601Json[104] = data;
+	   });
 
   // runGetBoxscore();
 
@@ -264,13 +276,12 @@ function setup() {
       return row.teamCode;
     });
 
-  // standingsFor240601Json.records[1].teamRecords[1].team
-  standingsFor240601 = [];
-  standingsFor240601Json.records.map(record =>
-    record.teamRecords.map(teamRecord =>
-      standingsFor240601.push([teamCodesById[teamRecord.team.id],
-			       teamRecord.wins,
-			       teamRecord.losses])));
+  [103, 104].forEach((league) =>
+    standingsFor240601Json[league].records.map(record =>
+      record.teamRecords.map(teamRecord =>
+	standingsFor240601.push([teamCodesById[teamRecord.team.id],
+				 teamRecord.wins,
+				 teamRecord.losses]))));
 
   teamCodes = teamsTable.getRows().map(row =>
     {
@@ -303,6 +314,7 @@ function setup() {
       minSalary;
   }
 
+  standingsArrNew = standingsFor240601;
   standingsArr = standingsTable.getRows().map(row => row.arr);
 
   standingsArr.sort((rowA, rowB) => {
