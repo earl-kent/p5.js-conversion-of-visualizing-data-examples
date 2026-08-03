@@ -314,8 +314,8 @@ function setup() {
       minSalary;
   }
 
-  standingsArrNew = standingsFor240601;
   standingsArr = standingsTable.getRows().map(row => row.arr);
+  standingsArrNew = standingsFor240601;
 
   standingsArr.sort((rowA, rowB) => {
     let winsA = Number(rowA[1]) || 0;
