@@ -289,6 +289,8 @@ function setup() {
       return row.arr[0];
     });
 
+  teamCodes = teamCodesNew;
+
   salaries26RankIndex =
     salariesTable26.getRows().map(row =>
       {
@@ -315,7 +317,7 @@ function setup() {
   }
 
   standingsArr = standingsTable.getRows().map(row => row.arr);
-  standingsArrNew = standingsFor240601;
+  standingsArr = standingsFor240601;
 
   standingsArr.sort((rowA, rowB) => {
     let winsA = Number(rowA[1]) || 0;
@@ -421,7 +423,8 @@ function setupRanking() {
 
 function setupLogos() {
   for (const code of teamCodes) {
-    logos[code] = loadImage("data/small/" + code + ".gif");
+    // logos[code] = loadImage("data/small/" + code + ".gif");
+    logos[code] = loadImage("https://www.mlbstatic.com/team-logos/108.svg");
   }
 }
 
