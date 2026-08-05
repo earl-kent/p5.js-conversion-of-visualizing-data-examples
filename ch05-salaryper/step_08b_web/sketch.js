@@ -302,6 +302,7 @@ function setup() {
   salariesRankIndex =
     salariesTable.getRows().map(row => [row.arr[0], Number(row.arr[1])]);
 
+  salariesRankIndex = salaries26RankIndex;
   salariesById = {};
   for (let i = 0; i < salariesRankIndex.length; i++) {
     let item = {};
