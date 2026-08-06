@@ -289,6 +289,7 @@ function setup() {
       return row.arr[0];
     });
 
+  teamNamesByCode = teamNamesByCodeNew;
   teamCodes = teamCodesNew;
 
   salaries26RankIndex =
@@ -500,7 +501,7 @@ function draw() {
     text(standingsById[code].wins +
 	 '-' +
 	 standingsById[code].losses,
-	 150,
+	 190,
 	 standingsY);
 
     let weight = map(salariesById[code].salary,
@@ -518,7 +519,7 @@ function draw() {
       stroke(206, 0, 82);   // Red for wasting money.
     }
 
-    line(160, standingsY, 325, salaryY);
+    line(200, standingsY, 325, salaryY);
 
     fill(128);
 
