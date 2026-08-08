@@ -428,7 +428,6 @@ function setupRanking() {
 
 function setupLogos() {
   for (const code of teamCodes) {
-    // logos[code] = loadImage("data/small/" + code + ".gif");
     logos[code] = loadImage("https://www.mlbstatic.com/team-logos/" +
 			    teamIdByCode[code] +
 			    ".svg");
