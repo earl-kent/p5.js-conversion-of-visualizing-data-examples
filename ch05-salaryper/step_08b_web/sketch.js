@@ -204,13 +204,13 @@ function preload() {
 
   // Standings information
 
-  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2024&date=2024-06-01",
+  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2026&date=2026-08-01",
 	   (data) =>
 	   {
 	     standingsFor240601Json[103] = data;
 	   });
 
-  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=104&season=2024&date=2024-06-01",
+  loadJSON("https://statsapi.mlb.com/api/v1/standings?leagueId=104&season=2026&date=2026-08-01",
 	   (data) =>
 	   {
 	     standingsFor240601Json[104] = data;
@@ -264,12 +264,15 @@ let teamCodesByName = {};
 let teamNamesByCode = {};
 let teamNamesByCodeNew = {};
 
+let teamIdByCode = {};
+
 function setup() {
   createCanvas(480, 750);
 
 
   teamCodesNew = teamsJson.teams.map(row =>
     {
+      teamIdByCode[row.teamCode] = row.id;
       teamCodesById[row.id] = row.teamCode;
       teamCodesByName[row.name] = row.teamCode;
       teamNamesByCodeNew[row.teamCode] = row.name;
@@ -426,7 +429,9 @@ function setupRanking() {
 function setupLogos() {
   for (const code of teamCodes) {
     // logos[code] = loadImage("data/small/" + code + ".gif");
-    logos[code] = loadImage("https://www.mlbstatic.com/team-logos/108.svg");
+    logos[code] = loadImage("https://www.mlbstatic.com/team-logos/" +
+			    teamIdByCode[code] +
+			    ".svg");
   }
 }
 
