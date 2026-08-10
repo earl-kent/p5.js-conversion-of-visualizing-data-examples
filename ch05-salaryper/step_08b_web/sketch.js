@@ -495,9 +495,6 @@ function draw() {
 
     let standingsY = (standingsPositionIntegrators[code].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
 
-
-
-
     let maxWidth = 25;
     let maxHeight = 25;
 
