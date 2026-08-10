@@ -494,7 +494,24 @@ function draw() {
   for (const code of teamCodes) {
 
     let standingsY = (standingsPositionIntegrators[code].value() * ROW_HEIGHT) + HALF_ROW_HEIGHT;
-    image(logos[code], 0 , standingsY - (25 / 2), 25, 25);
+
+
+
+
+    let maxWidth = 25;
+    let maxHeight = 25;
+
+    // Calculate scale ratios for both dimensions
+    let scaleX = maxWidth / logos[code].width;
+    let scaleY = maxHeight / logos[code].height;
+
+    // Use the smaller ratio so the image fits entirely inside
+    let scale = min(scaleX, scaleY);
+
+    let w = logos[code].width * scale;
+    let h = logos[code].height * scale;
+
+    image(logos[code], 0 , standingsY - (25 / 3), w, h);
 
     textAlign(LEFT, CENTER);
     text(standingsById[code].teamName, 28, standingsY);
