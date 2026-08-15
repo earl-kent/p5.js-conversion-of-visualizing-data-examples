@@ -63,22 +63,23 @@ int notUpdatedCount = 0;
 boolean zoomEnabled = false;
 Integrator zoomDepth = new Integrator();
 
-Integrator zoomX1;
-Integrator zoomY1;
-Integrator zoomX2;
-Integrator zoomY2;
+// integrators
+let zoomX1;
+let zoomY1;
+let zoomX2;
+let zoomY2;
 
-float targetX1[] = new float[6];
-float targetY1[] = new float[6];
-float targetX2[] = new float[6];
-float targetY2[] = new float[6];
+let targetX1 = [];
+let targetY1 = [];
+let targetX2 = [];
+let targetY2 = [];
 
 // boundary of currently valid points at this typedCount
-float boundsX1, boundsY1;
-float boundsX2, boundsY2;
+let boundsX1, boundsY1;
+let boundsX2, boundsY2;
 
 
-public void setup() {
+function setup() {
   size(720, 453, P3D);
 
   mapX1 = 30;
@@ -86,14 +87,14 @@ public void setup() {
   mapY1 = 20;
   mapY2 = height - mapY1;
 
-  font = loadFont("ScalaSans-Regular-14.vlw");
+  font = loadFont("data/ScalaSans-Regular-14.vlw");
   textFont(font);
   textMode(SCREEN);
 
   messageX = 40;
   messageY = height - 40;
 
-  faders = new ColorIntegrator[6];
+  faders = [];
 
   // When nothing is typed, all points are shown with a color called
   // "dormant," which is brighter than when not highlighted, but
