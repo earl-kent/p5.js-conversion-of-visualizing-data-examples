@@ -37,15 +37,15 @@ class Place {
       // The multiple levels of matching are important because more than one
       // depth level might be fading at a time.
       for (int j = typedCount; j > 0; --j) {
-	if (typedPartials[j] == partial[j]) {
-	  matchDepth = j;
+	if (typedPartials[j] == this.partial[j]) {
+	  this.matchDepth = j;
 	  break;  // since starting at end, can stop now
 	}
       }
     }
 
     //if (partial[typedCount] == partialCode) {
-    if (matchDepth == typedCount) {
+    if (this.matchDepth == typedCount) {
       foundCount++;
       if (typedCount == 5) {
 	chosen = this;
