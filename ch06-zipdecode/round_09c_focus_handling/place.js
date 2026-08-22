@@ -66,7 +66,7 @@ class Place {
 
     if ((zoomDepth.value < 2.8) || !zoomEnabled) {  // show simple dots
       //pixels[((int) yy) * width + ((int) xx)] = faders[matchDepth].cvalue;
-      set((int)xx, (int)yy, faders[matchDepth].colorValue);
+      set(xx, yy, faders[matchDepth].colorValue);
 
     } else {  // show slightly more complicated dots
       noStroke();
