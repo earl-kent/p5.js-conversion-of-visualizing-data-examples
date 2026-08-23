@@ -57,11 +57,11 @@ let foundCount;
 let chosen;
 
 // smart updates
-int notUpdatedCount = 0;
+let notUpdatedCount = 0;
 
 // zoom
-boolean zoomEnabled = false;
-Integrator zoomDepth = new Integrator();
+let zoomEnabled = false;
+let zoomDepth = new Integrator();
 
 // integrators
 let zoomX1;
@@ -100,7 +100,7 @@ function setup() {
   // "dormant," which is brighter than when not highlighted, but
   // not as bright as the highlight color for a selection.
   faders[0] = new ColorIntegrator(unhighlightColor, dormantColor);
-  faders[0].attraction = 0.5f;
+  faders[0].attraction = 0.5;
   faders[0].target(1);
 
   for (int i = 1; i < 6; i++) {
