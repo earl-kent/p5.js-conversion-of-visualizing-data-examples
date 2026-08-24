@@ -103,7 +103,7 @@ function setup() {
   faders[0].attraction = 0.5;
   faders[0].target(1);
 
-  for (int i = 1; i < 6; i++) {
+  for (i = 1; i < 6; i++) {
     faders[i] = new ColorIntegrator(unhighlightColor, highlightColor);
     faders[i].attraction = 0.5;
     faders[i].target(1);
@@ -128,57 +128,57 @@ function setup() {
 
 
 
-void readData() {
+function readData() {
   new Slurper();
   noLoop();  // done loading, can stop updating
 }
 
 
-void parseInfo(String line) {
-  String infoString = line.substring(2);  // remove the #
-  String[] infoPieces = split(infoString, ',');
-  totalCount = int(infoPieces[0]);
-  minX = float(infoPieces[1]);
-  maxX = float(infoPieces[2]);
-  minY = float(infoPieces[3]);
-  maxY = float(infoPieces[4]);
+function parseInfo(line) {
+  let infoString = line.substring(2);  // remove the #
+  let infoPieces = split(infoString, ',');
+  totalCount = infoPieces[0];
+  minX = infoPieces[1];
+  maxX = infoPieces[2];
+  minY = infoPieces[3];
+  maxY = infoPieces[4];
 }
 
 
-Place parsePlace(String line) {
-  String pieces[] = split(line, TAB);
+function parsePlace(line) {
+  let pieces = split(line, TAB);
 
-  int zip = int(pieces[CODE]);
-  float x = float(pieces[X]);
-  float y = float(pieces[Y]);
-  String name = pieces[NAME];
+  let zip = pieces[CODE];
+  let x = pieces[X];
+  let y = pieces[Y];
+  let name = pieces[NAME];
 
   return new Place(zip, name, x, y);
 }
 
 
 // change message from 'click inside the window'
-public void focusGained() {
+function focusGained() {
   redraw();
 }
 
 // change message to 'click inside the window'
-public void focusLost() {
+function focusLost() {
   redraw();
 }
 
 // this method is empty in p5
-public void mouseEntered() {
+function mouseEntered() {
   requestFocus();
 }
 
 
-public void draw() {
+function draw() {
   background(backgroundColor);
 
   updateAnimation();
 
-  for (int i = 0; i < placeCount; i++) {
+  for (i = 0; i < placeCount; i++) {
     places[i].draw();
   }
 
