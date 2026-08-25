@@ -185,9 +185,9 @@ function draw() {
   if (typedCount == 0) {
     fill(waitingColor);
     textAlign(LEFT);
-    String message = "zipdecode by ben fry";
+    let message = "zipdecode by ben fry";
     // if all places are loaded
-    if (placeCount == totalCount) {
+    if (placeCount === totalCount) {
       if (focused) {
 	message = "type the digits of a zip code";
       } else {
@@ -201,7 +201,7 @@ function draw() {
       if (!zoomEnabled && (typedCount == 4)) {
 	// re-draw the chosen ones, because they're often occluded
 	// by the non-selected points
-	for (int i = 0; i < placeCount; i++) {
+	for (i = 0; i < placeCount; i++) {
 	  if (places[i].matchDepth == typedCount) {
 	    places[i].draw();
 	  }
@@ -230,10 +230,10 @@ function draw() {
 }
 
 
-void updateAnimation() {
-  boolean updated = false;
+function updateAnimation() {
+  let updated = false;
 
-  for (int i = 0; i < 6; i++) {
+  for (i = 0; i < 6; i++) {
     updated |= faders[i].update();
   }
 
@@ -250,7 +250,7 @@ void updateAnimation() {
   updated |= zoomY2.update();
 
   // if the data is loaded, can optionally call noLoop() to save cpu
-  if (placeCount == totalCount) {  // if fully loaded
+  if (placeCount === totalCount) {  // if fully loaded
     if (!updated) {
       notUpdatedCount++;
       // after 20 frames of no updates, shut off the loop
@@ -265,7 +265,7 @@ void updateAnimation() {
 }
 
 
-float TX(float x) {
+function TX(x) {
   if (zoomEnabled) {
     return map(x, zoomX1.value, zoomX2.value, mapX1, mapX2);
 
@@ -275,7 +275,7 @@ float TX(float x) {
 }
 
 
-float TY(float y) {
+function TY(y) {
   if (zoomEnabled) {
     return map(y, zoomY1.value, zoomY2.value, mapY2, mapY1);
 
@@ -285,7 +285,7 @@ float TY(float y) {
 }
 
 
-void mousePressed() {
+function mousePressed() {
   if ((mouseX > width-100) && (mouseY > height - 50)) {
     zoomEnabled = !zoomEnabled;
     redraw();
@@ -293,7 +293,7 @@ void mousePressed() {
 }
 
 
-void keyPressed() {
+function keyPressed() {
   if ((key == BACKSPACE) || (key == DELETE)) {
     if (typedCount > 0) {
       typedCount--;
@@ -311,16 +311,16 @@ void keyPressed() {
 }
 
 
-void updateTyped() {
+function updateTyped() {
   typedString = new String(typedChars, 0, typedCount);
 
   // Un-highlight areas already typed past
-  for (int i = 0; i < typedCount; i++) faders[i].target(0);
+  for (i = 0; i < typedCount; i++) faders[i].target(0);
   // Highlight potential dots not yet selected by keys
-  for (int i = typedCount; i < 6; i++) faders[i].target(1);
+  for (i = typedCount; i < 6; i++) faders[i].target(1);
 
   typedPartials[typedCount] = int(typedString);
-  for (int j = typedCount-1; j > 0; --j) {
+  for (j = typedCount-1; j > 0; --j) {
     typedPartials[j] = typedPartials[j + 1] / 10;
   }
 
@@ -332,7 +332,7 @@ void updateTyped() {
   boundsX2 = minX;
   boundsY2 = minY;
 
-  for (int i = 0; i < placeCount; i++) {
+  for (i = 0; i < placeCount; i++) {
     // update boundaries of selection
     // and identify whether a particular place is chosen
     places[i].check();
@@ -343,20 +343,20 @@ void updateTyped() {
 }
 
 
-void calcZoom() {
+function calcZoom() {
   if (foundCount != 0) {
     // given a set of min/max coords, expand in one direction so that the
     // selected area includes the range with the proper aspect ratio
 
-    float spanX = (boundsX2 - boundsX1);
-    float spanY = (boundsY2 - boundsY1);
+    let spanX = (boundsX2 - boundsX1);
+    let spanY = (boundsY2 - boundsY1);
 
-    float midX = (boundsX1 + boundsX2) / 2;
-    float midY = (boundsY1 + boundsY2) / 2;
+    let midX = (boundsX1 + boundsX2) / 2;
+    let midY = (boundsY1 + boundsY2) / 2;
 
     if ((spanX != 0) && (spanY != 0)) {
-      float screenAspect = width / float(height);
-      float spanAspect = spanX / spanY;
+      let screenAspect = width / height;
+      let spanAspect = spanX / spanY;
 
       if (spanAspect > screenAspect) {
 	spanY = (spanX / width) * height;  // wide
