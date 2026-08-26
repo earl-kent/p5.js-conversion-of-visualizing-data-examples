@@ -80,7 +80,7 @@ let boundsX2, boundsY2;
 
 
 function setup() {
-  size(720, 453, P3D);
+  createCanvas(720, 453, WEBGL);
 
   mapX1 = 30;
   mapX2 = width - mapX1;
@@ -185,16 +185,16 @@ function draw() {
   if (typedCount == 0) {
     fill(waitingColor);
     textAlign(LEFT);
-    let message = "zipdecode by ben fry";
+    let msg = "zipdecode by ben fry";
     // if all places are loaded
     if (placeCount === totalCount) {
       if (focused) {
-	message = "type the digits of a zip code";
+	msg = "type the digits of a zip code";
       } else {
-	message = "click the map image to begin";
+	msg = "click the map image to begin";
       }
     }
-    text(message, messageX, messageY);
+    text(msg, messageX, messageY);
 
   } else {
     if (foundCount > 0) {
