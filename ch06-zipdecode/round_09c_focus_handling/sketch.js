@@ -89,7 +89,7 @@ function setup() {
 
   font = loadFont("data/ScalaSans-Regular-14.vlw");
   textFont(font);
-  textMode(SCREEN);
+  // textMode(SCREEN);
 
   messageX = 40;
   messageY = height - 40;
