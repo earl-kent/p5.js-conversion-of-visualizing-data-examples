@@ -2,14 +2,13 @@
 
 
 class Slurper {
-
-  public void run() {
+  run() {
     try {
-      InputStream input = openStream("zips.gz");
-      BufferedReader reader = createReader(input);
+      let input = openStream("zips.gz");
+      let reader = createReader(input);
 
       // first get the info line
-      String line = reader.readLine();
+      line = reader.readLine();
       parseInfo(line);
 
       places = new Place[totalCount];
@@ -19,8 +18,8 @@ class Slurper {
         places[placeCount] = parsePlace(line);
         placeCount++;
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (e) {
+      console.log("error running slurpper");
     }
   }
 }
