@@ -78,6 +78,10 @@ let targetY2 = [];
 let boundsX1, boundsY1;
 let boundsX2, boundsY2;
 
+function preload() {
+  // font = loadFont("data/ScalaSans-Regular-14.vlw");
+  font = loadFont("data/LiberationSans-Regular.ttf");
+}
 
 function setup() {
   createCanvas(720, 453, WEBGL);
@@ -87,7 +91,7 @@ function setup() {
   mapY1 = 20;
   mapY2 = height - mapY1;
 
-  font = loadFont("data/ScalaSans-Regular-14.vlw");
+
   textFont(font);
   // textMode(SCREEN);
 
