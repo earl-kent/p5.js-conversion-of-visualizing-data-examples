@@ -78,9 +78,11 @@ let targetY2 = [];
 let boundsX1, boundsY1;
 let boundsX2, boundsY2;
 
+let lizcodeTable;
 function preload() {
   // font = loadFont("data/ScalaSans-Regular-14.vlw");
   font = loadFont("data/LiberationSans-Regular.ttf");
+  zipcodeTable = loadTable("data/zips.tsv");
 }
 
 function setup() {
