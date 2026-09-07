@@ -82,7 +82,8 @@ let zipcodeTable;
 function preload() {
   // font = loadFont("data/ScalaSans-Regular-14.vlw");
   font = loadFont("data/LiberationSans-Regular.ttf");
-  zipcodeTable = loadTable("data/zips.tsv");
+  places = loadTable("data/zips.tsv");
+  totalCount = places.rows.length;
 }
 
 function setup() {
