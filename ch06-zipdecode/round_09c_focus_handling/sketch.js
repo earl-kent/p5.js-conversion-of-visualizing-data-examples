@@ -86,6 +86,7 @@ function preload() {
   totalCount = places.rows.length;
 }
 
+
 function setup() {
   createCanvas(720, 453, WEBGL);
 
