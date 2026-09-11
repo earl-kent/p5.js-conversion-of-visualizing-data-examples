@@ -56,4 +56,10 @@ class Integrator {
   noTarget() {
     this.targeting = false;
   }
+
+  set(v) {
+    this._value = v;
+    //targeting = false  ?
+  }
+
 }
